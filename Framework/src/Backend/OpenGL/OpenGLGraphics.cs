@@ -122,20 +122,6 @@ public class OpenGLGraphics : GameGraphics
     /// <inheritdoc />
     public override void Present(RenderPass pass)
     {
-        GL.glBindFramebuffer(0u);
-
-        // Clear the current framebuffer.
-        if (pass.ClearColor.A > 0)
-        {
-            GL.glClearColor(
-                pass.ClearColor.R / 255,
-                pass.ClearColor.G / 255,
-                pass.ClearColor.B / 255,
-                pass.ClearColor.A / 255
-            );
-            GL.glClear(GL.GL_COLOR_BUFFER_BIT);
-        }
-
         // Bind the surface and assign the OpenGL viewport.
         {
             var viewport = pass.Viewport ?? new RectangleI(
@@ -147,6 +133,18 @@ public class OpenGLGraphics : GameGraphics
 
             GL.glBindFramebuffer((pass.Surface is OpenGLSurface surface) ? surface.FramebufferID : 0u);
             GL.glViewport(viewport.X, viewport.Y, viewport.Width, viewport.Height);
+        }
+
+        // Clear the current framebuffer.
+        if (pass.ClearColor is Color color && color.A > 0)
+        {
+            GL.glClearColor(
+                color.R / 255,
+                color.G / 255,
+                color.B / 255,
+                color.A / 255
+            );
+            GL.glClear(GL.GL_COLOR_BUFFER_BIT);
         }
 
         // Bind the shader and its uniforms.
@@ -201,9 +199,9 @@ public class OpenGLGraphics : GameGraphics
                 {
                     GL.glUniform1ui(location, integer);
                 }
-                else if (uniform.Value is Color color)
+                else if (uniform.Value is Color color4)
                 {
-                    GL.glUniform4f(location, color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
+                    GL.glUniform4f(location, color4.R / 255f, color4.G / 255f, color4.B / 255f, color4.A / 255f);
                 }
                 else if (uniform.Value is OpenGLTexture texture)
                 {
@@ -239,5 +237,24 @@ public class OpenGLGraphics : GameGraphics
             GL.glBindBuffer(GL.GL_ARRAY_BUFFER, 0u);
             GL.glBindVertexArray(0u);
         }
+
+        // Unbind the current surface.
+        GL.glBindFramebuffer(0u);
+    }
+
+    /// <inheritdoc />
+    public override void Clear(Surface? surface, Color color)
+    {
+        var previousFramebuffer = GL.glGetIntegerv(GL.GL_FRAMEBUFFER_BINDING, 1);
+    
+        GL.glBindFramebuffer(surface is OpenGLSurface glSurface ? glSurface.FramebufferID : 0u);
+        GL.glClearColor(
+            color.R / 255,
+            color.G / 255,
+            color.B / 255,
+            color.A / 255
+        );
+        GL.glClear(GL.GL_COLOR_BUFFER_BIT);
+        GL.glBindFramebuffer((uint)previousFramebuffer[0]);
     }
 }

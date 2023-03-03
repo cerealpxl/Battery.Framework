@@ -71,4 +71,10 @@ public abstract class GameGraphics
     /// </summary>
     /// <param name="pass">The <see cref="RenderPass" /> to use.</param>
     public abstract void Present(RenderPass pass);
+
+    /// <summary>
+    ///     Clear the specified surface by using the specified color.
+    /// </summary>
+    /// <param name="color">The color to use.</param>
+    public abstract void Clear(Surface? surface, Color color);
 }

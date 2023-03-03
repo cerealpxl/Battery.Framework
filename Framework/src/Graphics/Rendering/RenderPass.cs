@@ -38,12 +38,12 @@ public struct RenderPass
     /// <summary>
     ///     The color used to clear the current surface.
     /// </summary>
-    public Color ClearColor = Color.Black;
+    public Color? ClearColor;
 
     /// <summary>
     ///     Creates a new instance of the <see cref="RenderPass" /> class.
     /// </summary>
-    public RenderPass(Mesh mesh, ShaderMaterial material, Surface? surface = null)
+    public RenderPass(Mesh mesh, ShaderMaterial material, Surface? surface = null, Color? clearColor = null)
     {
         Surface    = surface;
         Material   = material;
@@ -51,5 +51,6 @@ public struct RenderPass
         IndexStart = 0;
         IndexCount = mesh.IndexCount;
         Viewport   = null;
+        ClearColor = clearColor;
     }
 }

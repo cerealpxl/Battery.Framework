@@ -41,6 +41,7 @@ public class Program
 
             material.SetUniform("u_Matrix", Matrix4x4.Identity);
             material.SetUniform("u_Texture", texture);
+            game.Graphics.Clear(surface, Color.Blue);
             pass.Surface = surface;
             game.Graphics.Present(pass);
             pass.Surface = null;
