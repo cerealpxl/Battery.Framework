@@ -1,4 +1,6 @@
-﻿namespace Battery.Framework;
+﻿using System.Diagnostics;
+
+namespace Battery.Framework;
 
 /// <summary>
 ///     Battery Game.
@@ -33,6 +35,11 @@ public class Game
     public GameGraphics Graphics;
 
     /// <summary>
+    ///     The struct that store the current time data.
+    /// </summary>
+    public GameTime Time = new GameTime();
+
+    /// <summary>
     ///     Action called before the game starts.
     /// </summary>
     public event Action? OnBegin;
@@ -40,12 +47,12 @@ public class Game
     /// <summary>
     ///     Action called to update the game.
     /// </summary>
-    public event Action? OnUpdate;
+    public event Action<GameTime>? OnUpdate;
 
     /// <summary>
     ///     Action called to render the game.
     /// </summary>
-    public event Action? OnRender;
+    public event Action<GameTime>? OnRender;
 
     /// <summary>
     ///     Action called after the game ends.
@@ -76,21 +83,55 @@ public class Game
         Running = true;
         Exiting = false;
 
+        // Assign time variables.
+        var stopwatch   = Stopwatch.StartNew();
+        var accumulator = 0.0;
+
         while (Running)
         {
             Platform.Update();
+            
+            // Updates the current time.
+            Time.PreviousElapsed = Time.Elapsed;
+            Time.Elapsed         = stopwatch.Elapsed;
+            var deltaTime        = (Time.Elapsed - Time.PreviousElapsed).TotalSeconds;
 
-            if (Platform.Focused || RunWhileUnfocused)
+            // Snaps the delta time to a nice framerate.
+            if (Math.Abs(Time.RawDelta - 1f / 120f) < 0.0002f) Time.RawDelta = 1f / 120f;
+            if (Math.Abs(Time.RawDelta - 1f / 60f)  < 0.0002f) Time.RawDelta = 1f / 60f;
+            if (Math.Abs(Time.RawDelta - 1f / 30f)  < 0.0002f) Time.RawDelta = 1f / 30f;
+            if (Math.Abs(Time.RawDelta - 1f / 15f)  < 0.0002f) Time.RawDelta = 1f / 15f;
+
+            // Increase the accumulator.
+            accumulator += deltaTime;
+
+            // Prevents unexpected crashes.
+            if (accumulator >= Time.FixedDelta * 8f) 
             {
-                OnUpdate?.Invoke();
+                accumulator   = 0f;
+                Time.RawDelta = Time.FixedDelta;
             }
+
+            // Perform an update when the frame accumulator reaches the fixed delta tine.
+            while (accumulator >= Time.FixedDelta && !Exiting)
+            {
+                accumulator  -= Time.FixedDelta;
+                Time.RawDelta = Time.FixedDelta;
+                
+                if (Platform.Focused || RunWhileUnfocused)
+                    OnUpdate?.Invoke(Time);
+            }
+
+            // Updates the time variables for the variable timestep.
+            Time.RawDelta = (float)deltaTime;
 
             if (Exiting)
                 Running = false;
 
+            // Renders the game.
             if (Running)
             {
-                OnRender?.Invoke();
+                OnRender?.Invoke(Time);
                 Platform.Present();
             }
 
