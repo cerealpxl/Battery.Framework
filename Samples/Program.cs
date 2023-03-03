@@ -12,17 +12,19 @@ public class Program
         ShaderMaterial? material = null;
         Bitmap          bitmap   = new Bitmap("test.jpg");
         Texture?        texture  = null;
+        Surface?        surface  = null;
         
         game.OnBegin += () =>
         {
             mesh     = game.Graphics.CreateMesh();
             material = new ShaderMaterial(game.Graphics.CreateDefaultShader());
             texture  = game.Graphics.CreateTexture(bitmap);
+            surface  = game.Graphics.CreateSurface(640, 640);
         };
         
         game.OnRender += () =>
         {
-            if (mesh == null || material == null || texture == null)
+            if (mesh == null || material == null || texture == null || surface == null)
                 return;
 
             var pass = new RenderPass(
@@ -39,6 +41,18 @@ public class Program
 
             material.SetUniform("u_Matrix", Matrix4x4.Identity);
             material.SetUniform("u_Texture", texture);
+            pass.Surface = surface;
+            game.Graphics.Present(pass);
+            pass.Surface = null;
+            material.SetUniform("u_Texture", (Texture)surface);
+
+            mesh.Clear();
+            mesh.AddTriangle(
+                new Vertex(new Vector2( 0.5f,  0.5f), Vector2.Zero, Color.White, 255, 0, 0),
+                new Vertex(new Vector2(-0.5f,  0.5f), Vector2.UnitX, Color.White, 255, 0, 0),
+                new Vertex(new Vector2( 0.0f, -0.5f), new Vector2(0.5f, 1.0f), Color.White, 255, 0, 0)
+            );
+            
             game.Graphics.Present(pass);
         };
 

@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 namespace Battery.Framework;
 
 /// <summary>
-///     A OpenGl Graphics Backend.
+///     A OpenGl Graphics backend.
 /// </summary>
 public class OpenGLGraphics : GameGraphics
 {
@@ -15,7 +15,7 @@ public class OpenGLGraphics : GameGraphics
 
     /// <summary>
     ///     Creates a new instance of the <see cref="OpenGLGraphics" /> class.
-    /// </summary>
+    /// /// </summary>
     /// <param name="instance">The game to which the graphics belongs to.</param>
     public OpenGLGraphics(Game instance)
         : base(instance)
@@ -82,6 +82,10 @@ public class OpenGLGraphics : GameGraphics
     public override Texture CreateTexture(Bitmap bitmap)
         => new OpenGLTexture(bitmap);
 
+    /// <inheritdoc />
+    public override Surface CreateSurface(int width, int height)
+        => new OpenGLSurface(this, width, height);
+
     /// <summary>
     ///     Begins the OpenGL Graphics.
     /// </summary>
@@ -130,6 +134,19 @@ public class OpenGLGraphics : GameGraphics
                 pass.ClearColor.A / 255
             );
             GL.glClear(GL.GL_COLOR_BUFFER_BIT);
+        }
+
+        // Bind the surface and assign the OpenGL viewport.
+        {
+            var viewport = pass.Viewport ?? new RectangleI(
+                0, 
+                0,
+                pass.Surface != null ? pass.Surface.Width  : Game.Platform.Width,
+                pass.Surface != null ? pass.Surface.Height : Game.Platform.Height
+            );
+
+            GL.glBindFramebuffer((pass.Surface is OpenGLSurface surface) ? surface.FramebufferID : 0u);
+            GL.glViewport(viewport.X, viewport.Y, viewport.Width, viewport.Height);
         }
 
         // Bind the shader and its uniforms.

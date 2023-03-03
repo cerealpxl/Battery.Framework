@@ -27,27 +27,34 @@ public abstract class GameGraphics
     }
 
     /// <summary>
-    ///     Creates a new shader of this graphics implementations.
+    ///     Creates a new <see cref="Shader" /> of this graphics implementations.
     /// </summary>
     /// <param name="vertex">The vertex source code.</param>
     /// <param name="fragment">The fragment source code.</param>
     public abstract Shader CreateShader(string vertex, string fragment);
 
     /// <summary>
-    ///     Creates a new shader with the default batcher code.
+    ///     Creates a new <see cref="Shader" /> with the default batcher code.
     /// </summary>
     public abstract Shader CreateDefaultShader();
 
     /// <summary>
-    ///     Creates a new mesh of this graphics implementation.
+    ///     Creates a new <see cref="Mesh" /> of this graphics implementation.
     /// </summary>
     public abstract Mesh CreateMesh();
 
     /// <summary>
-    ///     Creates a new texture of this graphics implementation.
+    ///     Creates a new <see cref="Texture" /> of this graphics implementation.
     /// </summary>
     /// <param name="bitmap">The bitmap to use.</param>
     public abstract Texture CreateTexture(Bitmap bitmap);
+
+    /// <summary>
+    ///     Creates a new <see cref="Surface" /> of this graphics implementation.
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    public abstract Surface CreateSurface(int width, int height);
 
     /// <summary>
     ///     Called to begin the graphics after the platform initialization.

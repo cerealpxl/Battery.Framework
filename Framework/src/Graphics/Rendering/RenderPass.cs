@@ -6,14 +6,14 @@ namespace Battery.Framework;
 public struct RenderPass
 {
     /// <summary>
-    ///     The first index to render.
+    ///     The surface to use.
     /// </summary>
-    public int IndexStart;
-
+    public Surface? Surface;
+    
     /// <summary>
-    ///     The number of indices to render.
+    ///     The viewport 
     /// </summary>
-    public int IndexCount;
+    public RectangleI? Viewport;
 
     /// <summary>
     ///     The material to use.
@@ -26,18 +26,30 @@ public struct RenderPass
     public Mesh Mesh;
 
     /// <summary>
-    ///     The color used to clear the current framebuffer.
+    ///     The first index of the mesh to render.
+    /// </summary>
+    public int IndexStart;
+
+    /// <summary>
+    ///     The number of of the mesh indices to render.
+    /// </summary>
+    public int IndexCount;
+
+    /// <summary>
+    ///     The color used to clear the current surface.
     /// </summary>
     public Color ClearColor = Color.Black;
 
     /// <summary>
     ///     Creates a new instance of the <see cref="RenderPass" /> class.
     /// </summary>
-    public RenderPass(Mesh mesh, ShaderMaterial material)
+    public RenderPass(Mesh mesh, ShaderMaterial material, Surface? surface = null)
     {
-        Mesh       = mesh;
+        Surface    = surface;
         Material   = material;
+        Mesh       = mesh;
         IndexStart = 0;
         IndexCount = mesh.IndexCount;
+        Viewport   = null;
     }
 }
