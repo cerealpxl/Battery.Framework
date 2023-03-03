@@ -26,6 +26,8 @@ public class Program
         game.OnUpdate += (GameTime time) =>
         {
             x += 1;
+            if (Input.KeyPressed(KeyConstant.A))
+                x -= 16;
         };
         
         game.OnRender += (GameTime time) =>

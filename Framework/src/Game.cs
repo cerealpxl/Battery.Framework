@@ -120,6 +120,8 @@ public class Game
                 
                 if (Platform.Focused || RunWhileUnfocused)
                     OnUpdate?.Invoke(Time);
+
+                Input.Update();
             }
 
             // Updates the time variables for the variable timestep.
