@@ -16,10 +16,10 @@ public class OpenGLTexture : Texture
     /// <summary>
     ///     Creates a OpenGL Texture.
     /// </summary>
-    public OpenGLTexture(Image image, bool flipX = false, bool flipY = false)
-        : base(image, flipX, flipY)
+    public OpenGLTexture(Image image)
+        : base(image)
     {
-        ID     = GL.glGenTexture();
+        ID    = GL.glGenTexture();
         Image = image;
 
         GL.glBindTexture(GL.GL_TEXTURE_2D, ID);
@@ -51,9 +51,7 @@ public class OpenGLTexture : Texture
     ///     Dispose the OpenGL Texture.
     /// </summary>
     protected override void Disposing(bool disposing)
-    {
-        GL.glDeleteTexture(ID);
-    }
+        => GL.glDeleteTexture(ID);
 
     /// <summary>
     ///     Sets the texture data from the given buffer.

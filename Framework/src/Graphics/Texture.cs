@@ -36,25 +36,8 @@ public abstract class Texture : Graphic
     ///     Creates a new texture with the given image.
     /// </summary>
     /// <param name="image">The image that represents the image.</param>
-    /// <param name="flipX">Whether the image will be flipped horizontally.</param>
-    /// <param name="flipY">Whether the image will be flipped vertically.</param>
-    public Texture(Image image, bool flipX = false, bool flipY = false)
-    {
-        Image = image;
-        FlipX  = flipX;
-        FlipY  = flipY;
-    }
-
-    /// <summary>
-    ///     Creates a new texture, loading a image in the specified path.
-    /// </summary>
-    /// <param name="path">Path to the image.</param>
-    /// <param name="flipX">Whether the image will be flipped horizontally.</param>
-    /// <param name="flipY">Whether the image will be flipped vertically.</param>
-    public Texture(string path, bool flipX = false, bool flipY = false)
-        : this(new Image(path), flipX, flipY)
-    {
-    }
+    public Texture(Image image)
+        => Image = image;
 
     /// <summary>
     ///     Sets the texture data from the given buffer.

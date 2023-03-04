@@ -24,11 +24,6 @@ public class Image
     public Color[] Data { get; private set; }
 
     /// <summary>
-    ///     Path to the image file.
-    /// </summary>
-    public string Path { get; private set; } = "";
-
-    /// <summary>
     ///     Creates a image with the given color array.
     /// </summary>
     /// <param name="width">The width of the image.</param>
@@ -68,7 +63,7 @@ public class Image
 
     /// <summary>
     ///     Creates a image by using the given byte data.
-    ///     Used when creating a Font char.
+    ///     Used when creating a Font Char.
     /// </summary>
     /// <param name="width">The width of the image.</param>
     /// <param name="height">The height of the image.</param>
@@ -84,27 +79,31 @@ public class Image
     }
 
     /// <summary>
-    ///     Load the image from a image in the given path.
+    ///     Load the image from a file in the given path.
     /// </summary>
     /// <param name="path">The path to the file.</param>
-    public unsafe Image(string file)
+    public static unsafe Image FromFile(string file)
+        => FromStream(File.OpenRead(file));
+
+    /// <summary>
+    ///     Loads the image from the specified file stream.
+    /// </summary>
+    /// <param name="stream">The file stream to use.</param>
+    public static unsafe Image FromStream(FileStream stream)
     {
-        var stream = File.OpenRead(file);
-        var image  = ImageResult.FromStream(stream, StbImageSharp.ColorComponents.RedGreenBlueAlpha);
-
         // Assign variables.
-        Width  = image.Width;
-        Height = image.Height;
-        Data   = new Color[Width * Height];
-        Path   = file;
+        var rawImage = ImageResult.FromStream(stream, StbImageSharp.ColorComponents.RedGreenBlueAlpha);
+        var data = new Color[rawImage.Width * rawImage.Height];
 
-        for (int i = 0, j = 0; i < Data.Length; ++ i)
+        for (int i = 0, j = 0; i < data.Length; ++ i)
         {
-            Data[i].R = image.Data[j ++];
-            Data[i].G = image.Data[j ++];
-            Data[i].B = image.Data[j ++];
-            Data[i].A = image.Data[j ++];
+            data[i].R = rawImage.Data[j ++];
+            data[i].G = rawImage.Data[j ++];
+            data[i].B = rawImage.Data[j ++];
+            data[i].A = rawImage.Data[j ++];
         }
+
+        return new Image(rawImage.Width, rawImage.Height, data);
     }
 
     /// <summary>

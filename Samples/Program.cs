@@ -9,11 +9,11 @@ public class Program
     {
         var game = new Game();
         var x = 0;
-        Mesh<Batch.Vertex>?   mesh     = null;
-        ShaderMaterial? material = null;
-        Image          image   = new Image("test.jpg");
-        Texture?        texture  = null;
-        Surface?        surface  = null;
+        Mesh<Batch.Vertex>?   mesh = null;
+        ShaderMaterial? material   = null;
+        Image           image      = Image.FromFile("test.jpg");
+        Texture?        texture    = null;
+        Surface?        surface    = null;
         
         game.OnBegin += () =>
         {
