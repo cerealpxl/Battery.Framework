@@ -6,20 +6,20 @@ namespace Battery.Framework;
 /// <summary>
 ///     Class that stores a 2D image.
 /// </summary>
-public class Bitmap
+public class Image
 {
     /// <summary>
-    ///     The Width of the Bitmap, in Pixels.
+    ///     The Width of the Image, in Pixels.
     /// </summary>
     public int Width { get; private set; }
 
     /// <summary>
-    ///     The Height of the Bitmap, in Pixels.
+    ///     The Height of the Image, in Pixels.
     /// </summary>
     public int Height { get; private set; }
 
     /// <summary>
-    ///     Array that store the pixel data of the Bitmap.
+    ///     Array that store the pixel data of the Image.
     /// </summary>
     public Color[] Data { get; private set; }
 
@@ -29,18 +29,18 @@ public class Bitmap
     public string Path { get; private set; } = "";
 
     /// <summary>
-    ///     Creates a bitmap with the given color array.
+    ///     Creates a image with the given color array.
     /// </summary>
-    /// <param name="width">The width of the bitmap.</param>
-    /// <param name="height">The height of the bitmap.</param>
-    /// <param name="data">The array containing the pixels of the bitmap.</param>
-    public Bitmap(int width, int height, Color[] data)
+    /// <param name="width">The width of the image.</param>
+    /// <param name="height">The height of the image.</param>
+    /// <param name="data">The array containing the pixels of the image.</param>
+    public Image(int width, int height, Color[] data)
     {
         if (width <= 0 || height <= 0)
-            throw new Exception("The width and height of the bitmap must be larger than 0.");
+            throw new Exception("The width and height of the image must be larger than 0.");
 
         if (data.Length < width * height)
-            throw new Exception("The pixel array doesn't fits the given bitmap dimensions.");
+            throw new Exception("The pixel array doesn't fits the given image dimensions.");
 
         // Assign variables.
         Width  = width;
@@ -49,15 +49,15 @@ public class Bitmap
     }
 
     /// <summary>
-    ///     Creates an empty bitmap filled with the given color.
+    ///     Creates an empty image filled with the given color.
     /// </summary>
-    /// <param name="width">The width of the bitmap.</param>
-    /// <param name="height">The height of the bitmap.</param>
-    /// <param name="color">The color used to fill the bitmap.</param>
-    public Bitmap(int width, int height, Color color)
+    /// <param name="width">The width of the image.</param>
+    /// <param name="height">The height of the image.</param>
+    /// <param name="color">The color used to fill the image.</param>
+    public Image(int width, int height, Color color)
     {
         if (width <= 0 || height <= 0)
-            throw new Exception("The width and height of the bitmap must be larger than 0.");
+            throw new Exception("The width and height of the image must be larger than 0.");
             
         Width  = width;
         Height = height;
@@ -67,13 +67,13 @@ public class Bitmap
     }
 
     /// <summary>
-    ///     Creates a bitmap by using the given byte data.
+    ///     Creates a image by using the given byte data.
     ///     Used when creating a Font char.
     /// </summary>
-    /// <param name="width">The width of the bitmap.</param>
-    /// <param name="height">The height of the bitmap.</param>
+    /// <param name="width">The width of the image.</param>
+    /// <param name="height">The height of the image.</param>
     /// <param name="data">The bytes of the char.</param>
-    public Bitmap(int width, int height, byte[] data)
+    public Image(int width, int height, byte[] data)
     {
         Width  = width;
         Height = height;
@@ -84,10 +84,10 @@ public class Bitmap
     }
 
     /// <summary>
-    ///     Load the bitmap from a image in the given path.
+    ///     Load the image from a image in the given path.
     /// </summary>
     /// <param name="path">The path to the file.</param>
-    public unsafe Bitmap(string file)
+    public unsafe Image(string file)
     {
         var stream = File.OpenRead(file);
         var image  = ImageResult.FromStream(stream, StbImageSharp.ColorComponents.RedGreenBlueAlpha);
@@ -108,7 +108,7 @@ public class Bitmap
     }
 
     /// <summary>
-    ///     Saves the Bitmap to a PNG File.
+    ///     Saves the Image to a PNG File.
     /// </summary>
     /// <param name="file">Location of the file.</param>
     public void Save(string file)

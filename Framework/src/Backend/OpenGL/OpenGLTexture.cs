@@ -16,11 +16,11 @@ public class OpenGLTexture : Texture
     /// <summary>
     ///     Creates a OpenGL Texture.
     /// </summary>
-    public OpenGLTexture(Bitmap bitmap, bool flipX = false, bool flipY = false)
-        : base(bitmap, flipX, flipY)
+    public OpenGLTexture(Image image, bool flipX = false, bool flipY = false)
+        : base(image, flipX, flipY)
     {
         ID     = GL.glGenTexture();
-        Bitmap = bitmap;
+        Image = image;
 
         GL.glBindTexture(GL.GL_TEXTURE_2D, ID);
         GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
@@ -28,14 +28,14 @@ public class OpenGLTexture : Texture
         GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_BORDER);
         GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_BORDER);
 
-        unsafe { fixed (Color* ptr = Bitmap.Data)
+        unsafe { fixed (Color* ptr = Image.Data)
         {
             GL.glTexImage2D(
                 GL.GL_TEXTURE_2D,
                 0,
                 GL.GL_RGBA,
-                Bitmap.Width,
-                Bitmap.Height,
+                Image.Width,
+                Image.Height,
                 0,
                 GL.GL_RGBA,
                 GL.GL_UNSIGNED_BYTE,
@@ -69,8 +69,8 @@ public class OpenGLTexture : Texture
             GL.GL_TEXTURE_2D,
             0,
             GL.GL_RGBA,
-            Bitmap.Width,
-            Bitmap.Height,
+            Image.Width,
+            Image.Height,
             0,
             GL.GL_RGBA,
             GL.GL_UNSIGNED_BYTE,

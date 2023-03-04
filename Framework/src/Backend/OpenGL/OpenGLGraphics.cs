@@ -79,8 +79,8 @@ public class OpenGLGraphics : GameGraphics
         => new OpenGLMesh<T>();
 
     /// <inheritdoc />
-    public override Texture CreateTexture(Bitmap bitmap)
-        => new OpenGLTexture(bitmap);
+    public override Texture CreateTexture(Image image)
+        => new OpenGLTexture(image);
 
     /// <inheritdoc />
     public override Surface CreateSurface(int width, int height)

@@ -8,19 +8,19 @@ namespace Battery.Framework;
 public abstract class Texture : Graphic
 {
     /// <summary>
-    ///     The bitmap that store the texture data.
+    ///     The image that store the texture data.
     /// </summary>
-    public Bitmap Bitmap;
+    public Image Image;
 
     /// <summary>
     ///     The width of the texture.
     /// </summary>
-    public int Width => Bitmap.Width;
+    public int Width => Image.Width;
 
     /// <summary>
     ///     The height of the texture.
     /// </summary>
-    public int Height => Bitmap.Height;
+    public int Height => Image.Height;
 
     /// <summary>
     ///     Whether the image will be flipped horizontally when rendered.
@@ -33,14 +33,14 @@ public abstract class Texture : Graphic
     public bool FlipY;
 
     /// <summary>
-    ///     Creates a new texture with the given bitmap.
+    ///     Creates a new texture with the given image.
     /// </summary>
-    /// <param name="bitmap">The bitmap that represents the image.</param>
+    /// <param name="image">The image that represents the image.</param>
     /// <param name="flipX">Whether the image will be flipped horizontally.</param>
     /// <param name="flipY">Whether the image will be flipped vertically.</param>
-    public Texture(Bitmap bitmap, bool flipX = false, bool flipY = false)
+    public Texture(Image image, bool flipX = false, bool flipY = false)
     {
-        Bitmap = bitmap;
+        Image = image;
         FlipX  = flipX;
         FlipY  = flipY;
     }
@@ -52,7 +52,7 @@ public abstract class Texture : Graphic
     /// <param name="flipX">Whether the image will be flipped horizontally.</param>
     /// <param name="flipY">Whether the image will be flipped vertically.</param>
     public Texture(string path, bool flipX = false, bool flipY = false)
-        : this(new Bitmap(path), flipX, flipY)
+        : this(new Image(path), flipX, flipY)
     {
     }
 

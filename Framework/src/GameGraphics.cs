@@ -46,8 +46,8 @@ public abstract class GameGraphics
     /// <summary>
     ///     Creates a new <see cref="Texture" /> of this graphics implementation.
     /// </summary>
-    /// <param name="bitmap">The bitmap to use.</param>
-    public abstract Texture CreateTexture(Bitmap bitmap);
+    /// <param name="image">The image to use.</param>
+    public abstract Texture CreateTexture(Image image);
 
     /// <summary>
     ///     Creates a new <see cref="Surface" /> of this graphics implementation.

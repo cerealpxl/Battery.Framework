@@ -11,7 +11,7 @@ public class Program
         var x = 0;
         Mesh<Batch.Vertex>?   mesh     = null;
         ShaderMaterial? material = null;
-        Bitmap          bitmap   = new Bitmap("test.jpg");
+        Image          image   = new Image("test.jpg");
         Texture?        texture  = null;
         Surface?        surface  = null;
         
@@ -19,7 +19,7 @@ public class Program
         {
             mesh     = game.Graphics.CreateMesh<Batch.Vertex>();
             material = new ShaderMaterial(game.Graphics.CreateDefaultShader());
-            texture  = game.Graphics.CreateTexture(bitmap);
+            texture  = game.Graphics.CreateTexture(image);
             surface  = game.Graphics.CreateSurface(640, 640);
         };
 

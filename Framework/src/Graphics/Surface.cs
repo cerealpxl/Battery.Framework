@@ -30,7 +30,7 @@ public abstract class Surface : Graphic
         : base()
     {
         // Creates the texture attachment.
-        Attachment = graphics.CreateTexture(new Bitmap(width, height, Color.Transparent));
+        Attachment = graphics.CreateTexture(new Image(width, height, Color.Transparent));
     }
 
     /// <summary>
