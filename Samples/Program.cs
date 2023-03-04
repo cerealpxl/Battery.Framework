@@ -9,7 +9,7 @@ public class Program
     {
         var game = new Game();
         var x = 0;
-        Mesh?           mesh     = null;
+        Mesh<Batch.Vertex>?   mesh     = null;
         ShaderMaterial? material = null;
         Bitmap          bitmap   = new Bitmap("test.jpg");
         Texture?        texture  = null;
@@ -17,7 +17,7 @@ public class Program
         
         game.OnBegin += () =>
         {
-            mesh     = game.Graphics.CreateMesh();
+            mesh     = game.Graphics.CreateMesh<Batch.Vertex>();
             material = new ShaderMaterial(game.Graphics.CreateDefaultShader());
             texture  = game.Graphics.CreateTexture(bitmap);
             surface  = game.Graphics.CreateSurface(640, 640);
@@ -35,16 +35,16 @@ public class Program
             if (mesh == null || material == null || texture == null || surface == null)
                 return;
 
-            var pass = new RenderPass(
+            var pass = new RenderPass<Batch.Vertex>(
                 mesh,
                 material
             );
 
             mesh.Clear();
             mesh.AddTriangle(
-                new Vertex(new Vector2( 0.5f,  0.5f), Vector2.Zero, Color.White, 255, 0, 0),
-                new Vertex(new Vector2(-0.5f,  0.5f), Vector2.UnitX, Color.White, 255, 0, 0),
-                new Vertex(new Vector2( 0.0f, -0.5f), new Vector2(0.5f, 1.0f), Color.White, 255, 0, 0)
+                new Batch.Vertex(new Vector2( 0.5f,  0.5f), Vector2.Zero, Color.White, 255, 0, 0),
+                new Batch.Vertex(new Vector2(-0.5f,  0.5f), Vector2.UnitX, Color.White, 255, 0, 0),
+                new Batch.Vertex(new Vector2( 0.0f, -0.5f), new Vector2(0.5f, 1.0f), Color.White, 255, 0, 0)
             );
 
             material.SetUniform("u_Matrix", Matrix4x4.Identity);
@@ -58,9 +58,9 @@ public class Program
 
             mesh.Clear();
             mesh.AddTriangle(
-                new Vertex(new Vector2( 0.5f,  0.5f), Vector2.Zero, Color.White, 255, 0, 0),
-                new Vertex(new Vector2(-0.5f,  0.5f), Vector2.UnitX, Color.White, 255, 0, 0),
-                new Vertex(new Vector2( 0.0f, -0.5f), new Vector2(0.5f, 1.0f), Color.White, 255, 0, 0)
+                new Batch.Vertex(new Vector2( 0.5f,  0.5f), Vector2.Zero, Color.White, 255, 0, 0),
+                new Batch.Vertex(new Vector2(-0.5f,  0.5f), Vector2.UnitX, Color.White, 255, 0, 0),
+                new Batch.Vertex(new Vector2( 0.0f, -0.5f), new Vector2(0.5f, 1.0f), Color.White, 255, 0, 0)
             );
             
             game.Graphics.Present(pass);
@@ -69,9 +69,9 @@ public class Program
             pass.ClearColor = null;
             mesh.Clear();
             mesh.AddTriangle(
-                new Vertex(new Vector2(x,      15), Vector2.Zero, Color.White, 0, 0, 255),
-                new Vertex(new Vector2(x + 15, 15), Vector2.UnitX, Color.White, 0, 0, 255),
-                new Vertex(new Vector2(x + 7,  32), new Vector2(0.5f, 1.0f), Color.White, 0, 0, 255)
+                new Batch.Vertex(new Vector2(x,      15), Vector2.Zero, Color.White, 0, 0, 255),
+                new Batch.Vertex(new Vector2(x + 15, 15), Vector2.UnitX, Color.White, 0, 0, 255),
+                new Batch.Vertex(new Vector2(x + 7,  32), new Vector2(0.5f, 1.0f), Color.White, 0, 0, 255)
             );
             
             game.Graphics.Present(pass);

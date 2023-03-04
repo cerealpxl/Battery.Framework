@@ -75,8 +75,8 @@ public class OpenGLGraphics : GameGraphics
     }
 
     /// <inheritdoc />
-    public override Mesh CreateMesh()
-        => new OpenGLMesh();
+    public override Mesh<T> CreateMesh<T>()
+        => new OpenGLMesh<T>();
 
     /// <inheritdoc />
     public override Texture CreateTexture(Bitmap bitmap)
@@ -120,7 +120,7 @@ public class OpenGLGraphics : GameGraphics
         => SDL.SDL_GL_DeleteContext(_glPointer);
 
     /// <inheritdoc />
-    public override void Present(RenderPass pass)
+    public override void Present<T>(RenderPass<T> pass)
     {
         // Bind the surface and assign the OpenGL viewport.
         {
@@ -213,21 +213,33 @@ public class OpenGLGraphics : GameGraphics
         }
 
         // Draw the elements of the mesh.
-        if (pass.Mesh is OpenGLMesh mesh) unsafe 
+        if (pass.Mesh is OpenGLMesh<T> mesh && mesh.VertexCount > 0) unsafe 
         {
             mesh.Bind();
 
-            // Bind the vertex attribute.
-            var size = Marshal.SizeOf<Vertex>();
+            // Bind the vertex attributes.
+            var size        = Marshal.SizeOf<T>();
+            var description = mesh._vertices[0].Description;
+            var pointer     = 0u;
 
-            GL.glVertexAttribPointer(0, 2, GL.GL_FLOAT,         false, size, GL.NULL);
-            GL.glVertexAttribPointer(1, 2, GL.GL_FLOAT,         false, size, new IntPtr(2 * sizeof(float)).ToPointer());
-            GL.glVertexAttribPointer(2, 4, GL.GL_UNSIGNED_BYTE, true,  size, new IntPtr(4 * sizeof(float)).ToPointer());
-            GL.glVertexAttribPointer(3, 3, GL.GL_UNSIGNED_BYTE, true,  size, new IntPtr(4 * sizeof(float) + 4 * sizeof(byte)).ToPointer());
-            GL.glEnableVertexAttribArray(0);
-            GL.glEnableVertexAttribArray(1);
-            GL.glEnableVertexAttribArray(2);
-            GL.glEnableVertexAttribArray(3);
+            for (int i = 0; i < description.Attributes.Count; i ++)
+            {
+                var attribute = description.Attributes[i];
+                var type = attribute.Type switch
+                {
+                    VertexAttributeType.Byte    => GL.GL_UNSIGNED_BYTE,
+                    VertexAttributeType.Int     => GL.GL_INT,
+                    VertexAttributeType.Short   => GL.GL_SHORT,
+                    VertexAttributeType.Float   => GL.GL_FLOAT,
+
+                    _ => throw new NotImplementedException(),
+                };
+
+                GL.glEnableVertexAttribArray((uint)i);
+                GL.glVertexAttribPointer((uint)i, attribute.ComponentCount, type, attribute.Normalized, description.Stride, new IntPtr(pointer));
+
+                pointer += (uint)(attribute.ComponentCount * attribute.ComponentSize);
+            }
 
             // Finally. draw the elements.
             GL.glDrawElements(GL.GL_TRIANGLES, pass.IndexCount, GL.GL_UNSIGNED_INT, new IntPtr(sizeof(uint) * pass.IndexStart).ToPointer());   

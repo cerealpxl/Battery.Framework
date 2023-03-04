@@ -3,7 +3,7 @@ namespace Battery.Framework;
 /// <summary>
 ///     Structure that describes a single render call to the <see cref="GameGraphics" />.
 /// </summary>
-public struct RenderPass
+public struct RenderPass<T> where T : struct, IVertex
 {
     /// <summary>
     ///     The surface to use.
@@ -23,7 +23,7 @@ public struct RenderPass
     /// <summary>
     ///     The mesh to use.
     /// </summary>
-    public Mesh Mesh;
+    public Mesh<T> Mesh;
 
     /// <summary>
     ///     The first index of the mesh to render.
@@ -43,7 +43,7 @@ public struct RenderPass
     /// <summary>
     ///     Creates a new instance of the <see cref="RenderPass" /> class.
     /// </summary>
-    public RenderPass(Mesh mesh, ShaderMaterial material, Surface? surface = null, Color? clearColor = null)
+    public RenderPass(Mesh<T> mesh, ShaderMaterial material, Surface? surface = null, Color? clearColor = null)
     {
         Surface    = surface;
         Material   = material;

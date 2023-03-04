@@ -90,11 +90,7 @@ public class Game
         while (Running)
         {
             Platform.Update();
-            
-            // Updates the current time.
-            Time.PreviousElapsed = Time.Elapsed;
-            Time.Elapsed         = stopwatch.Elapsed;
-            var deltaTime        = (Time.Elapsed - Time.PreviousElapsed).TotalSeconds;
+            Time.Update(stopwatch.Elapsed, Time.Elapsed);
 
             // Snaps the delta time to a nice framerate.
             if (Math.Abs(Time.RawDelta - 1f / 120f) < 0.0002f) Time.RawDelta = 1f / 120f;
@@ -103,7 +99,7 @@ public class Game
             if (Math.Abs(Time.RawDelta - 1f / 15f)  < 0.0002f) Time.RawDelta = 1f / 15f;
 
             // Increase the accumulator.
-            accumulator += deltaTime;
+            accumulator += Time.RawDelta;
 
             // Prevents unexpected crashes.
             if (accumulator >= Time.FixedDelta * 8f) 
@@ -113,6 +109,7 @@ public class Game
             }
 
             // Perform an update when the frame accumulator reaches the fixed delta tine.
+            var delta = Time.RawDelta;
             while (accumulator >= Time.FixedDelta && !Exiting)
             {
                 accumulator  -= Time.FixedDelta;
@@ -125,7 +122,7 @@ public class Game
             }
 
             // Updates the time variables for the variable timestep.
-            Time.RawDelta = (float)deltaTime;
+            Time.RawDelta = (float)delta;
 
             if (Exiting)
                 Running = false;

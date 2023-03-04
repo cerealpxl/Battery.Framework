@@ -6,7 +6,7 @@ namespace Battery.Framework;
 /// <summary>
 ///     A OpenGL mesh.
 /// </summary>
-public class OpenGLMesh : Mesh
+public class OpenGLMesh<T> : Mesh<T> where T : struct, IVertex
 {   
     /// <summary>
     ///     Vertex Array ID.
@@ -64,17 +64,17 @@ public class OpenGLMesh : Mesh
     /// </summary>
     internal unsafe void Upload()
     {
+        var size = Marshal.SizeOf<T>();
+
         GL.glBindVertexArray(_vertexArrayID);
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, _vertexBufferID);
         GL.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, _indexBufferID);
 
-        var size = Marshal.SizeOf<Vertex>();
+        using var pinned1 = _vertices.AsMemory().Pin();
+        GL.glBufferData(GL.GL_ARRAY_BUFFER, _vertices.Count() * size, pinned1.Pointer, GL.GL_DYNAMIC_DRAW);
 
-        fixed (Vertex* pointer = &_vertices[0])
-            GL.glBufferData(GL.GL_ARRAY_BUFFER, _vertices.Count() * size, pointer, GL.GL_DYNAMIC_DRAW);
-
-        fixed (uint* pointer = &_indices[0])
-            GL.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, _indices.Count() * sizeof(uint), pointer, GL.GL_DYNAMIC_DRAW);
+        using var pinned2 =  _indices.AsMemory().Pin();
+        GL.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, _indices.Count() * sizeof(uint), pinned2.Pointer, GL.GL_DYNAMIC_DRAW);
         
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, 0u);
         GL.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, 0u);

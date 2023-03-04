@@ -3,7 +3,7 @@ namespace Battery.Framework;
 /// <summary>
 ///     Structure that store all the time values.
 /// </summary>
-public class GameTime
+public struct GameTime
 {
     /// <summary>
     ///     The current total elapsed time, in Seconds.
@@ -45,5 +45,17 @@ public class GameTime
     /// </summary>
     public GameTime()
     {
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="elapsed"></param>
+    /// <param name="previousElapsed"></param>
+    internal void Update(TimeSpan elapsed, TimeSpan previousElapsed)
+    {
+        Elapsed         = elapsed;
+        PreviousElapsed = previousElapsed;
+        RawDelta        = (float)(Elapsed - PreviousElapsed).TotalSeconds;
     }
 }

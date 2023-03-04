@@ -41,7 +41,7 @@ public abstract class GameGraphics
     /// <summary>
     ///     Creates a new <see cref="Mesh" /> of this graphics implementation.
     /// </summary>
-    public abstract Mesh CreateMesh();
+    public abstract Mesh<T> CreateMesh<T>() where T : struct, IVertex;
 
     /// <summary>
     ///     Creates a new <see cref="Texture" /> of this graphics implementation.
@@ -70,7 +70,7 @@ public abstract class GameGraphics
     ///     Presents the given <see cref="RenderPass" />.
     /// </summary>
     /// <param name="pass">The <see cref="RenderPass" /> to use.</param>
-    public abstract void Present(RenderPass pass);
+    public abstract void Present<T>(RenderPass<T> pass) where T : struct, IVertex;
 
     /// <summary>
     ///     Clear the specified surface by using the specified color.

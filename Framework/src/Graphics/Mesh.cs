@@ -5,7 +5,7 @@ namespace Battery.Framework;
 /// <summary>
 ///     A mesh that store vertices used when rendering to the screen.
 /// </summary>
-public abstract class Mesh : Graphic
+public abstract class Mesh<T> : Graphic where T : struct, IVertex
 {
     /// <summary>
     ///     Number of vertices in the Mesh.
@@ -18,7 +18,7 @@ public abstract class Mesh : Graphic
     public int IndexCount { get; private set; }
 
     // Array that store vertices.
-    internal Vertex[] _vertices;
+    internal T[] _vertices;
 
     // Array that store indices.
     internal uint[] _indices;
@@ -33,7 +33,7 @@ public abstract class Mesh : Graphic
     public Mesh(int capacity = 4)
     {
         // Assign variables.
-        _vertices   = new Vertex[capacity];
+        _vertices   = new T[capacity];
         _indices    = new uint[capacity];
         VertexCount = 0;
         IndexCount  = 0;
@@ -68,7 +68,7 @@ public abstract class Mesh : Graphic
     ///     Add vertices to the Mesh.
     /// </summary>
     /// <param name="_vertices">The vertices to add.</param>
-    public void AddVertices(Vertex[] _vertices)
+    public void AddVertices(T[] _vertices)
     {
         EnsureCapacity(ref this._vertices, VertexCount + _vertices.Length);
 
@@ -79,8 +79,8 @@ public abstract class Mesh : Graphic
     /// <summary>
     ///     Add a vertex to the Mesh.
     /// </summary>
-    /// <param name="Vertex">The vertex to add.</param>
-    public void AddVertex(Vertex value)
+    /// <param name="T">The vertex to add.</param>
+    public void AddVertex(T value)
     {
         EnsureCapacity(ref _vertices, VertexCount + 1);
         _vertices[VertexCount ++] = value;
@@ -91,7 +91,7 @@ public abstract class Mesh : Graphic
     /// </summary>
     /// <param name="a">The first vertex to add.</param>
     /// <param name="b">The second vertex to add.</param>
-    public void AddVertices(Vertex a, Vertex b)
+    public void AddVertices(T a, T b)
     {
         EnsureCapacity(ref _vertices, VertexCount + 2);
         _vertices[VertexCount ++] = a;
@@ -104,7 +104,7 @@ public abstract class Mesh : Graphic
     /// <param name="a">The first vertex to add.</param>
     /// <param name="b">The second vertex to add.</param>
     /// <param name="c">The third vertex to add.</param>
-    public void AddVertices(Vertex a, Vertex b, Vertex c) 
+    public void AddVertices(T a, T b, T c) 
     {
         EnsureCapacity(ref _vertices, VertexCount + 3);
         _vertices[VertexCount ++] = a;
@@ -119,7 +119,7 @@ public abstract class Mesh : Graphic
     /// <param name="b">The second vertex to add.</param>
     /// <param name="c">The third vertex to add.</param>
     /// <param name="d">The fourth vertex to add.</param>
-    public void AddVertices(Vertex a, Vertex b, Vertex c, Vertex d)
+    public void AddVertices(T a, T b, T c, T d)
     {
         EnsureCapacity(ref _vertices, VertexCount + 4);
         _vertices[VertexCount ++] = a; 
@@ -198,7 +198,7 @@ public abstract class Mesh : Graphic
     /// <param name="a">The first vertex to add.</param>
     /// <param name="b">The second vertex to add.</param>
     /// <param name="c">The third vertex to add.</param>
-    public void AddTriangle(ref Vertex a, ref Vertex b, ref Vertex c)
+    public void AddTriangle(ref T a, ref T b, ref T c)
     {
         uint count = (uint)VertexCount;
         EnsureCapacity(ref _indices, IndexCount + 3);
@@ -219,7 +219,7 @@ public abstract class Mesh : Graphic
     /// <param name="b">The second vertex to add.</param>
     /// <param name="c">The third vertex to add.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void AddTriangle(Vertex a, Vertex b, Vertex c)
+    public void AddTriangle(T a, T b, T c)
     {
         AddTriangle(ref a, ref b, ref c);
     }
@@ -231,7 +231,7 @@ public abstract class Mesh : Graphic
     /// <param name="b">The second vertex to add.</param>
     /// <param name="c">The third vertex to add.</param>
     /// <param name="d">The fourth vertex to add.</param>
-    public void AddQuad(ref Vertex a, ref Vertex b, ref Vertex c, ref Vertex d)
+    public void AddQuad(ref T a, ref T b, ref T c, ref T d)
     {
         uint count = (uint)VertexCount;
         EnsureCapacity(ref _indices, IndexCount + 6);
@@ -257,7 +257,7 @@ public abstract class Mesh : Graphic
     /// <param name="c">The third vertex to add.</param>
     /// <param name="d">The fourth vertex to add.</param>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public void AddQuad(Vertex a, Vertex b, Vertex c, Vertex d)
+    public void AddQuad(T a, T b, T c, T d)
     {
         AddQuad(ref a, ref b, ref c, ref d);
     }
@@ -267,7 +267,7 @@ public abstract class Mesh : Graphic
     /// </summary>
     /// <param name="vertices">The vertices to add.</param>
     /// <param name="indices">The indices to add.</param>
-    public void AddGeometry(Vertex[] vertices, uint[] indices)
+    public void AddGeometry(T[] vertices, uint[] indices)
     {
         uint count = (uint)VertexCount;
         EnsureCapacity(ref _indices, IndexCount + indices.Length);
