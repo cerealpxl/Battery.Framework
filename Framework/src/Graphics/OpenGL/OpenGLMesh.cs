@@ -73,7 +73,7 @@ public class OpenGLMesh<T> : Mesh<T> where T : struct, IVertex
         using var pinned1 = _vertices.AsMemory().Pin();
         GL.glBufferData(GL.GL_ARRAY_BUFFER, _vertices.Count() * size, pinned1.Pointer, GL.GL_DYNAMIC_DRAW);
 
-        using var pinned2 =  _indices.AsMemory().Pin();
+        using var pinned2 = _indices.AsMemory().Pin();
         GL.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, _indices.Count() * sizeof(uint), pinned2.Pointer, GL.GL_DYNAMIC_DRAW);
         
         GL.glBindBuffer(GL.GL_ARRAY_BUFFER, 0u);
