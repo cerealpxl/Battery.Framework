@@ -1,6 +1,3 @@
-using System.Numerics;
-using OpenGL;
-
 namespace Battery.Framework;
 
 /// <summary>
