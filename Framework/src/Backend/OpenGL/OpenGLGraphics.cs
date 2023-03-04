@@ -1,4 +1,3 @@
-using SDL2;
 using OpenGL;
 using System.Numerics;
 using System.Runtime.InteropServices;
@@ -10,8 +9,8 @@ namespace Battery.Framework;
 /// </summary>
 public class OpenGLGraphics : GameGraphics
 {
-    /// The pointer to the OpenGl Context.
-    internal IntPtr _glPointer;
+    /// The context of the OpenGL graphics..
+    internal IPlatformWithOpenGL.Context? _context;
 
     /// <summary>
     ///     Creates a new instance of the <see cref="OpenGLGraphics" /> class.
@@ -91,18 +90,12 @@ public class OpenGLGraphics : GameGraphics
     /// </summary>
     public override void Begin()
     {
-        if (Game.Platform is SDLPlatform sdlPlatform)
+        if (Game.Platform is IPlatformWithOpenGL platform)
         {
-            // Initializes the OpenGl Context in the SDL window.
-            _glPointer = SDL.SDL_GL_CreateContext(sdlPlatform._window);
+            _context = platform.CreateContext();
+            _context = platform.SetContext(_context);
 
-            // Error handling.
-            if (_glPointer == IntPtr.Zero)
-                throw new Exception(SDL.SDL_GetError());
-
-            // Finally, initialize the OpenGl.
-            SDL.SDL_GL_MakeCurrent(sdlPlatform._window, _glPointer);
-            GL.Import(SDL.SDL_GL_GetProcAddress);
+            GL.Import(platform.GetGLProcAdress);
         }
         else
             throw new Exception("The Window Platform does not supports the OpenGl.");
@@ -117,7 +110,7 @@ public class OpenGLGraphics : GameGraphics
     ///     Ends the OpenGl graphics.
     /// </summary>
     public override void End()
-        => SDL.SDL_GL_DeleteContext(_glPointer);
+        => _context?.Dispose();
 
     /// <inheritdoc />
     public override void Present<T>(RenderPass<T> pass)

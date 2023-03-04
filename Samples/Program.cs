@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using Battery.Framework;
+using Battery.Framework.SDL2;
 
 namespace Battery.Samples;
 
@@ -7,7 +8,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        var game = new Game();
+        var game = new Game(new SDLPlatform());
         var x = 0;
         Mesh<Batch.Vertex>?   mesh = null;
         ShaderMaterial? material   = null;

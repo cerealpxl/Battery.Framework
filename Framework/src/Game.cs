@@ -62,20 +62,20 @@ public class Game
     /// <summary>
     ///     Creates a new instance of the Game class.
     /// </summary>
-    /// <param name="platform">The optional <see cref="GamePlatform" /> to handle the game window.</param>
-    /// <param name="graphics">The optional <see cref="GameGraphics" /> to handle the graphics backend.</param>
-    public Game(GamePlatform? platform = null, GameGraphics? graphics = null)
+    /// <param name="platform">The <see cref="GamePlatform" /> to handle the game window.</param>
+    /// <param name="graphics">The <see cref="GameGraphics" /> to handle the graphics backend.</param>
+    public Game(GamePlatform platform, GameGraphics? graphics = null)
     {
-        Platform = platform ?? GamePlatform.CreateDefault(this);
+        Platform = platform;
         Graphics = graphics ?? GameGraphics.CreateDefault(this);
     }
 
     /// <summary>
     ///     Begins the Platform and Graphics and runs the Game Loop.
     /// </summary>
-    public void Launch(string title, int width, int height)
+    public void Launch(string title, int width, int height, bool fullscreen = false, bool borderless = false, bool vsync = false)
     {
-        Platform.Begin(title, width, height);
+        Platform.Begin(this, title, width, height, fullscreen, borderless, vsync);
         Graphics.Begin();
         OnBegin?.Invoke();
 

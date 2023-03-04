@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\..\Framework\Battery.Framework.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="($([MSBuild]::IsOsPlatform(Windows)) and '$(RuntimeIdentifier)'=='') or '$(RuntimeIdentifier)'=='win-x64'">
+    <TargetOS>win</TargetOS>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="($([MSBuild]::IsOsPlatform(OSX)) and '$(RuntimeIdentifier)'=='') or '$(RuntimeIdentifier)'=='osx-x64'">
+    <TargetOS>osx</TargetOS>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetOS)'=='win'">
+    <None Update="SDL2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <!-- Copy libSDL2 for macOS -->
+  <ItemGroup Condition="'$(TargetOS)'=='osx'">
+    <None Update="libSDL2.dylib">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

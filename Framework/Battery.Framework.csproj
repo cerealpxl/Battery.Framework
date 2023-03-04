@@ -13,8 +13,4 @@
     <PackageReference Include="StbTrueTypeSharp" Version="1.26.11" />
   </ItemGroup>
   
-  <ItemGroup>
-      <None Include="SDL2.dll" CopyToOutputDirectory="PreserveNewest"/>
-  </ItemGroup>
-  
 </Project>

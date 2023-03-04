@@ -11,7 +11,7 @@ public abstract class GamePlatform
     /// <summary>
     ///     The game to which the platform belongs to.
     /// </summary>
-    public Game Game { get; private set; }
+    public Game? Game { get; protected set; }
 
     /// <summary>
     ///     The title of the window.
@@ -87,33 +87,16 @@ public abstract class GamePlatform
     public Action? OnExit;
 
     /// <summary>
-    ///     Initialize a new instance of the <see cref="GamePlatform" /> class. 
-    /// </summary>
-    /// <param name="game">The game to which the platform belongs to.</param>
-    public GamePlatform(Game game)
-    {
-        Game = game;
-    }
-
-    /// <summary>
-    ///     Creates the default window platform.
-    /// </summary>
-    /// <param name="instance">The game to which the platform belongs to.</param>
-    public static GamePlatform CreateDefault(Game instance)
-    {
-        return new SDLPlatform(instance);
-    }
-
-    /// <summary>
     ///     Begins the Window Platform.
     /// </summary>
+    /// <param name="game">The game instance to witch the platform belongs to.</param>
     /// <param name="title">The title of the window.</param>
     /// <param name="width">The width of the window.</param>
     /// <param name="height">The height of the window.</param>
     /// <param name="fullscreen">Whether the window starts in the fullscreen mode.</param>
     /// <param name="borderless">Whether the window starts without a border.</param>
     /// <param name="vsync">Whether the window starts with the vertical synchronization enabled.</param>
-    public abstract void Begin(string title, int width, int height, bool fullscreen = false, bool borderless = false, bool vsync = false);
+    public abstract void Begin(Game game, string title, int width, int height, bool fullscreen = false, bool borderless = false, bool vsync = false);
 
     /// <summary>
     ///     Ends the Window Platform.

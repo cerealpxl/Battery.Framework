@@ -82,7 +82,7 @@ public static class Input
     /// <summary>
     /// Updates the state of the given key.
     /// </summary>
-    internal static void DoKeyDown(KeyConstant key)
+    public static void DoKeyDown(KeyConstant key)
     {
         if (_keyDown.Contains(key))
             return;
@@ -95,7 +95,7 @@ public static class Input
     /// <summary>
     /// Updates the state of the given key.
     /// </summary>
-    internal static void DoKeyUp(KeyConstant key)
+    public static void DoKeyUp(KeyConstant key)
     {
         if (!_keyDown.Contains(key))
             return;
@@ -177,7 +177,7 @@ public static class Input
     /// <summary>
     ///     Updates the state of the given button.
     /// </summary>
-    internal static void DoMouseDown(MouseButton button)
+    public static void DoMouseDown(MouseButton button)
     {
         if (_mouseDown.Contains(button))
             return;
@@ -190,7 +190,7 @@ public static class Input
     /// <summary>
     ///     Updates the state of the given button.
     /// </summary>
-    internal static void DoMouseUp(MouseButton button)
+    public static void DoMouseUp(MouseButton button)
     {
         if (!_mouseDown.Contains(button))
             return;
@@ -203,7 +203,7 @@ public static class Input
     /// <summary>
     ///     Updates the mouse position.
     /// </summary>
-    internal static void DoMouseMotion(int x, int y) 
+    public static void DoMouseMotion(int x, int y) 
         => MousePosition = new Vector2(x, y);
 
     #endregion

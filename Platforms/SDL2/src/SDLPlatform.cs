@@ -1,12 +1,12 @@
 using System.Numerics;
 using SDL2;
 
-namespace Battery.Framework;
+namespace Battery.Framework.SDL2;
 
 /// <summary>
 ///     A SDL2 window platform.
 /// /// </summary>
-public class SDLPlatform : GamePlatform
+public class SDLPlatform : GamePlatform, IPlatformWithOpenGL
 {
 
     /// <inheritdoc />
@@ -130,8 +130,8 @@ public class SDLPlatform : GamePlatform
     ///     Initializes a new instance of <see cref="SDLPlatform" /> class.
     /// </summary>
     /// <param name="instance">The game to which the platform belongs to.</param>
-    public SDLPlatform(Game instance)
-        : base(instance)
+    public SDLPlatform()
+        : base()
     {
         if (SDL.SDL_Init(SDL.SDL_INIT_EVERYTHING) != 0)
             throw new Exception(SDL.SDL_GetError());
@@ -151,10 +151,12 @@ public class SDLPlatform : GamePlatform
     /// <param name="height">The height of the window.</param>
     /// <param name="fullscreen">Whether the window starts in the fullscreen mode.</param>
     /// <param name="borderless">Whether the window starts without a border.</param>
-    public override void Begin(string title, int width, int height, bool fullscreen = false, bool borderless = false, bool vsync = false)
+    public override void Begin(Game game, string title, int width, int height, bool fullscreen = false, bool borderless = false, bool vsync = false)
     {
+        Game = game;
+
         // Setup the OpenGL Attributes before creating the window.
-        if (Game.Graphics is OpenGLGraphics)
+        if (game.Graphics is OpenGLGraphics)
         {
             SDL.SDL_GL_SetAttribute(SDL.SDL_GLattr.SDL_GL_CONTEXT_MAJOR_VERSION, 3);
             SDL.SDL_GL_SetAttribute(SDL.SDL_GLattr.SDL_GL_CONTEXT_MINOR_VERSION, 3);
@@ -211,7 +213,7 @@ public class SDLPlatform : GamePlatform
                     switch (ev.window.windowEvent)
                     {
                         case SDL.SDL_WindowEventID.SDL_WINDOWEVENT_CLOSE:
-                            Game.Exit();
+                            Game?.Exit();
                             OnExit?.Invoke();
                         break;
                         case SDL.SDL_WindowEventID.SDL_WINDOWEVENT_FOCUS_GAINED:
@@ -226,7 +228,7 @@ public class SDLPlatform : GamePlatform
                 break;
                 case SDL.SDL_EventType.SDL_QUIT:
                     OnExit?.Invoke();
-                    Game.Exit();
+                    Game?.Exit();
                 break;
 
                 // Keyboard events.
@@ -270,13 +272,68 @@ public class SDLPlatform : GamePlatform
     {
         OnRender?.Invoke();
 
-        if (Game.Graphics is OpenGLGraphics glGraphics)
+        if (Game != null && Game.Graphics is OpenGLGraphics glGraphics)
         {
-            SDL.SDL_GL_MakeCurrent(_window, glGraphics._glPointer);
             SDL.SDL_GL_SetSwapInterval(_vsync == true ? 1 : 0);
             SDL.SDL_GL_SwapWindow(_window);
         }
     }
+
+    #region OpenGL backend.
+    
+    /// <summary>
+    ///     The OpenGL context.
+    /// </summary>
+    public class OpenGLContext : IPlatformWithOpenGL.Context
+    {
+        // The pointer to the OpenGL Context.
+        internal IntPtr _pointer;
+
+        public OpenGLContext(IntPtr pointer)
+            => this._pointer = pointer;
+
+        /// <inheritdoc />
+        public override void Dispose()
+            => SDL.SDL_GL_DeleteContext(_pointer);
+    }
+
+    /// <inheritdoc />
+    public IntPtr GetGLProcAdress(string name)
+        => SDL.SDL_GL_GetProcAddress(name);
+
+    /// <inheritdoc />
+    public IPlatformWithOpenGL.Context CreateContext()
+    {
+        // Initializes the OpenGl Context in the SDL window.
+        var glPointer = SDL.SDL_GL_CreateContext(_window);
+
+        // Error handling.
+        if (glPointer == IntPtr.Zero)
+            throw new Exception(SDL.SDL_GetError());
+
+        return new OpenGLContext(glPointer);
+    }
+
+    /// <inheritdoc />
+    public IPlatformWithOpenGL.Context GetContext()
+        => new OpenGLContext(SDL.SDL_GL_GetCurrentContext());
+
+    /// <inheritdoc />
+    public IPlatformWithOpenGL.Context SetContext(IPlatformWithOpenGL.Context context)
+    {
+        if (context is OpenGLContext glContext)
+            SDL.SDL_GL_MakeCurrent(_window, glContext._pointer);
+
+        return context;
+    }
+
+    #endregion
+
+    #region Vulkan backend.
+
+    #endregion
+
+    #region Helpers.
 
     /// <summary>
     /// Parse a SDL Keycode to a KeyConstant.
@@ -376,4 +433,7 @@ public class SDLPlatform : GamePlatform
 
         return KeyConstant.Unknown;
     }
+
+    #endregion
+
 }
