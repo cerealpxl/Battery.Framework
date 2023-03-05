@@ -902,4 +902,55 @@ public class Batch
     }
 
     #endregion
+
+    
+    #region Surface operations
+
+    /// <summary>
+    ///     Sets the given surface as the current Render Target.
+    /// </summary>
+    /// <param name="surface">The surface to set.</param>
+    public void PushSurface(Surface surface, Matrix3x2? matrix = null)
+    {
+        _surfaceStack.Push(_batch.Surface);
+        SetSurface(surface);
+        PushMatrix(matrix ?? Matrix3x2.Identity);
+    }
+
+    /// <summary>
+    ///     Resets the last given surface target.
+    /// </summary>
+    public void PopSurface()
+    {
+        if (_surfaceStack.Count == 0)
+            throw new Exception("Unable to pop the Surface because the Surface Stack is empty.");
+
+        SetSurface(_surfaceStack.Pop());
+        PopMatrix();
+    }
+
+    #endregion
+    
+    #region Matrix operations
+
+    /// <summary>
+    ///     Transforms the current matrix by using the specified matrix.
+    /// </summary>
+    /// <param name="matrix">The matrix used to transform.</param>
+    public void PushMatrix(Matrix3x2 matrix)
+    {
+        _matrixStack.Push(Matrix);
+        Matrix = matrix;
+    }
+
+    /// <summary>
+    ///     Pop the lsat matrix.
+    /// </summary>
+    public void PopMatrix()
+    {
+        Matrix = _matrixStack.Pop();
+    }
+
+    #endregion
+
 }
