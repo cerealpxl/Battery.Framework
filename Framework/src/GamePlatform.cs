@@ -6,7 +6,7 @@ namespace Battery.Framework;
 ///     The class that extends all Game Platforms.
 ///     Provides the window handle logic.
 /// </summary>
-public abstract class GamePlatform
+public abstract class GamePlatform : RenderTarget
 {
     /// <summary>
     ///     The game to which the platform belongs to.
@@ -26,20 +26,12 @@ public abstract class GamePlatform
     /// <summary>
     ///     The width of the window.
     /// </summary>
-    public int Width
-    {
-        get => (int)Dimensions.X;
-        set => Dimensions = new Vector2(value, Dimensions.Y);
-    }
+    public override int Width => (int)Dimensions.X;
 
     /// <summary>
     ///     The height of the window.
     /// </summary>
-    public int Height
-    {
-        get => (int)Dimensions.Y;
-        set => Dimensions = new Vector2(Dimensions.X, value);
-    }
+    public override int Height => (int)Dimensions.Y;
 
     /// <summary>
     ///     Gets or Sets whether the window is in the fullscreen mode.

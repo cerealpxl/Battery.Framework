@@ -73,8 +73,9 @@ public abstract class GameGraphics
     public abstract void Present<T>(RenderPass<T> pass) where T : struct, IVertex;
 
     /// <summary>
-    ///     Clear the specified surface by using the specified color.
+    ///     Clear the specified <see cref="RenderTarget" /> by using the specified color.
     /// </summary>
+    /// <param name="target">The target to clear..</param>
     /// <param name="color">The color to use.</param>
-    public abstract void Clear(Surface? surface, Color color);
+    public abstract void Clear(RenderTarget target, Color color);
 }

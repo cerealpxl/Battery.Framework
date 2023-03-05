@@ -3,7 +3,7 @@ using OpenGL;
 namespace Battery.Framework;
 
 /// <summary>
-/// A surface that can be drawn to.
+///     A surface that can be drawn to.
 /// </summary>
 public class OpenGLSurface : Surface
 {
@@ -37,7 +37,7 @@ public class OpenGLSurface : Surface
     /// <summary>
     ///     Dispose the framebuffer.
     /// </summary>
-    protected override void Disposing(bool disposing)
+    public override void Dispose()
     {
         GL.glDeleteFramebuffer(FramebufferID);
         Attachment.Dispose();

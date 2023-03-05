@@ -6,9 +6,9 @@ namespace Battery.Framework;
 public struct RenderPass<T> where T : struct, IVertex
 {
     /// <summary>
-    ///     The surface to use.
+    ///     The target to use.
     /// </summary>
-    public Surface? Surface;
+    public RenderTarget Target;
     
     /// <summary>
     ///     The viewport 
@@ -16,14 +16,14 @@ public struct RenderPass<T> where T : struct, IVertex
     public RectangleI? Viewport;
 
     /// <summary>
-    ///     The material to use.
-    /// </summary>
-    public ShaderMaterial Material;
-
-    /// <summary>
     ///     The mesh to use.
     /// </summary>
     public Mesh<T> Mesh;
+
+    /// <summary>
+    ///     The material to use.
+    /// </summary>
+    public ShaderMaterial Material;
 
     /// <summary>
     ///     The first index of the mesh to render.
@@ -36,21 +36,18 @@ public struct RenderPass<T> where T : struct, IVertex
     public int IndexCount;
 
     /// <summary>
-    ///     The color used to clear the current surface.
-    /// </summary>
-    public Color? ClearColor;
-
-    /// <summary>
     ///     Creates a new instance of the <see cref="RenderPass" /> class.
     /// </summary>
-    public RenderPass(Mesh<T> mesh, ShaderMaterial material, Surface? surface = null, Color? clearColor = null)
+    /// <param name="target">The target to use.</param>
+    /// <param name="mesh">The mesh to use.</param>
+    /// <param name="material">The material to use.</param>
+    public RenderPass(RenderTarget target, Mesh<T> mesh, ShaderMaterial material)
     {
-        Surface    = surface;
-        Material   = material;
+        Target     = target;
+        Viewport   = null;
         Mesh       = mesh;
+        Material   = material;
         IndexStart = 0;
         IndexCount = mesh.IndexCount;
-        Viewport   = null;
-        ClearColor = clearColor;
     }
 }

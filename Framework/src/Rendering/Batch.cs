@@ -25,9 +25,9 @@ internal struct BatchItem
     public Texture? Texture;
 
     /// <summary>
-    ///     Surface to use.
+    ///     Render Target to use.
     /// </summary>
-    public Surface? Surface;
+    public RenderTarget Target;
     
     /// <summary>
     ///     First vertex to be rendered.
@@ -45,15 +45,15 @@ internal struct BatchItem
     /// <param name="matrix">The matrix used to render.</param>
     /// <param name="material">The material used to render.</param>
     /// <param name="texture">The texture used to render.</param>
-    /// <param name="surface">The surface used to render.</param>
+    /// <param name="target">The target used to render.</param>
     /// <param name="start">The first vertex to render.</param>
     /// <param name="count">The number of vertices to render.</param>
-    public BatchItem(Matrix3x2? matrix, ShaderMaterial? material, Texture? texture, Surface? surface, int start, int count)
+    public BatchItem(Matrix3x2? matrix, ShaderMaterial? material, Texture? texture, RenderTarget target, int start, int count)
     {
         Matrix     = matrix ?? Matrix3x2.Identity;
         Material   = material;
         Texture    = texture;
-        Surface    = surface;
+        Target     = target;
         IndexStart = start;
         IndexCount = count;
     }
@@ -161,7 +161,7 @@ public class Batch
     /// <summary>
     ///     The graphics backend to which the batch belongs to.
     /// </summary>
-    public GameGraphics Graphics;
+    public Game Game;
 
     // The mesh used by the batch.
     internal Mesh<Vertex> _mesh;
@@ -172,8 +172,8 @@ public class Batch
     // A stack that store the pushed matrices.
     private Stack<Matrix3x2> _matrixStack = new Stack<Matrix3x2>();
 
-    // A stack that store the pushed surfaces.
-    private Stack<Surface?> _surfaceStack = new Stack<Surface?>();
+    // A stack that store the pushed render targets.
+    private Stack<RenderTarget> _targetStack = new Stack<RenderTarget>();
 
     // The index of the current batch in the batch list.
     private int _batchInsert;
@@ -196,14 +196,13 @@ public class Batch
     ///     Creates a new instance of the <see cref="Batch" /> class.
     /// </summary>
     /// <param name="graphics">The current graphics backend.</param>
-    public Batch(GameGraphics graphics)
+    public Batch(Game game)
     {
-        DefaultShaderMaterial = new ShaderMaterial(graphics.CreateDefaultShader());
+        Game = game;
+        DefaultShaderMaterial = new ShaderMaterial(Game.Graphics.CreateDefaultShader());
 
-        _mesh = graphics.CreateMesh<Vertex>();
-        _pass = new RenderPass<Vertex>(_mesh, DefaultShaderMaterial);
-
-        Graphics = graphics;
+        _mesh = Game.Graphics.CreateMesh<Vertex>();
+        _pass = new RenderPass<Vertex>(Game.Platform, _mesh, DefaultShaderMaterial);
     }
 
     /// <summary>
@@ -211,15 +210,66 @@ public class Batch
     /// </summary>
     public void Clear()
     {
-        _batch       = new BatchItem(null, null, null, null, 0, 0);
+        _batch       = new BatchItem(null, null, null, Game.Platform, 0, 0);
         _batchInsert = 0;
         
         _matrixStack.Clear();
-        _surfaceStack.Clear();
+        _targetStack.Clear();
         _mesh.Clear();
         _items.Clear();
 
         Matrix = Matrix3x2.Identity;
+    }
+    
+    /// <summary>
+    ///     Presents the batch to display the rendered contents.
+    /// </summary>
+    public void Present()
+    {
+        if (_items.Count > 0 || _batch.IndexCount > 0)
+        {
+            /// <summary>
+            ///     Function used to draw a single batch item to the screen.
+            /// </summary>
+            /// <param name="batch">BatchItem to draw.</param>
+            /// <param name="matrix">Matrix to use.</param>
+            void PerformDraw(BatchItem batch)
+            {
+                var mat4x4 = Matrix4x4.CreateOrthographicOffCenter(
+                    0, 
+                    batch.Target.Width,
+                    batch.Target.Height,
+                    0,
+                    0,
+                    1
+                );
+                
+                _pass.Material = batch.Material ?? DefaultShaderMaterial;
+                _pass.Material.SetUniform("u_Matrix", new Matrix4x4(batch.Matrix) * mat4x4);
+                _pass.Material.SetUniform("u_Texture", batch.Texture);
+
+                _pass.Target     = batch.Target;
+                _pass.IndexStart = batch.IndexStart;
+                _pass.IndexCount = batch.IndexCount;
+
+                Game.Graphics.Present(_pass);
+            }
+
+            // Loop for each batch in the list.
+            for (int i = 0; i < _items.Count; i ++)
+            {
+                // Draws the remaining indices in the current batch.
+                if (_batchInsert == i && _batch.IndexCount > 0)
+                    PerformDraw(_batch);
+
+                // Draws the batch.
+                PerformDraw(_items[i]);
+            }
+
+            // Draws the remaining indices in the current batch.
+            if (_batchInsert == _items.Count && _batch.IndexCount > 0)
+                PerformDraw(_batch);
+        }
     }
     
     #region Changing the render state
@@ -269,20 +319,20 @@ public class Batch
     }
 
     /// <summary>
-    ///     Sets the current surface.
+    ///     Sets the current render target.
     /// </summary>
-    /// <param name="surface">Surface to use.</param>
-    public void SetSurface(Surface? surface)
+    /// <param name="target">RenderTarget to use.</param>
+    public void SetRenderTarget(RenderTarget target)
     {
         if (_batch.IndexCount == 0)
         {
-            _batch.Surface = surface;
+            _batch.Target = target;
         }
-        else if (_batch.Surface != surface)
+        else if (_batch.Target != target)
         {
             _items.Insert(_batchInsert, _batch);
 
-            _batch.Surface     = surface;
+            _batch.Target      = target;
             _batch.IndexStart += _batch.IndexCount;
             _batch.IndexCount  = 0;
 
@@ -291,53 +341,6 @@ public class Batch
     }
 
     #endregion
-    
-    /// <summary>
-    ///     Presents the batch to display the rendered contents.
-    /// </summary>
-    /// <param name="matrix">The matrix to use.</param>
-    public void Present(Matrix4x4 matrix)
-    {
-        if (_items.Count > 0 || _batch.IndexCount > 0)
-        {
-            /// <summary>
-            ///     Function used to draw a batch to the screen.
-            /// </summary>
-            /// <param name="batch">BatchItem to draw.</param>
-            /// <param name="matrix">Matrix to use.</param>
-            void PerformDraw(BatchItem batch, Matrix4x4 matrix)
-            {
-                var mat4x4 = matrix;
-                if (batch.Surface != null)
-                    mat4x4 = Matrix4x4.CreateOrthographicOffCenter(0, batch.Surface.Width, batch.Surface.Height, 0, 0, 1);
-                
-                _pass.Material = batch.Material ?? DefaultShaderMaterial;
-                _pass.Material.SetUniform("u_Matrix", new Matrix4x4(batch.Matrix) * mat4x4);
-                _pass.Material.SetUniform("u_Texture", batch.Texture);
-
-                _pass.Surface    = batch.Surface;
-                _pass.IndexStart = batch.IndexStart;
-                _pass.IndexCount = batch.IndexCount;
-
-                Graphics.Present(_pass);
-            }
-
-            // Loop for each batch in the list.
-            for (int i = 0; i < _items.Count; i ++)
-            {
-                // Draws the remaining indices in the current batch.
-                if (_batchInsert == i && _batch.IndexCount > 0)
-                    PerformDraw(_batch, matrix);
-
-                // Draws the batch.
-                PerformDraw(_items[i], matrix);
-            }
-
-            // Draws the remaining indices in the current batch.
-            if (_batchInsert == _items.Count && _batch.IndexCount > 0)
-                PerformDraw(_batch, matrix);
-        }
-    }
     
     #region Draws a Quad
 
@@ -433,8 +436,7 @@ public class Batch
     }
 
     #endregion
-
-    
+ 
     #region Draws a Line
     
     /// <summary>
@@ -903,29 +905,30 @@ public class Batch
 
     #endregion
 
-    
-    #region Surface operations
+
+    #region Render Target operations
 
     /// <summary>
-    ///     Sets the given surface as the current Render Target.
+    ///     Sets the the current Render Target.
     /// </summary>
-    /// <param name="surface">The surface to set.</param>
-    public void PushSurface(Surface surface, Matrix3x2? matrix = null)
+    /// <param name="target">The target to set.</param>
+    /// <param name="matrix">The optional view matrix.</param>
+    public void PushTarget(RenderTarget target, Matrix3x2? matrix = null)
     {
-        _surfaceStack.Push(_batch.Surface);
-        SetSurface(surface);
+        _targetStack.Push(_batch.Target);
+        SetRenderTarget(target);
         PushMatrix(matrix ?? Matrix3x2.Identity);
     }
 
     /// <summary>
-    ///     Resets the last given surface target.
+    ///     Resets the last render target.
     /// </summary>
-    public void PopSurface()
+    public void PopTarget()
     {
-        if (_surfaceStack.Count == 0)
-            throw new Exception("Unable to pop the Surface because the Surface Stack is empty.");
+        if (_targetStack.Count == 0)
+            throw new Exception("Unable to pop the target because the RenderTarget Stack is empty.");
 
-        SetSurface(_surfaceStack.Pop());
+        SetRenderTarget(_targetStack.Pop());
         PopMatrix();
     }
 
@@ -952,5 +955,4 @@ public class Batch
     }
 
     #endregion
-
 }

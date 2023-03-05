@@ -11,17 +11,17 @@ public class Program
     {
         Batch? batch = null;
 
-        Project.OnBegin  += (             ) => batch = new Batch(Project.Graphics);
+        Project.OnBegin  += (             ) => batch = new Batch(Project);
         Project.OnRender += (GameTime time) =>
         {
-            Project.Graphics.Clear(null, Color.Black);
+            Project.Graphics.Clear(Project.Platform, Color.Black);
             batch?.Clear();
 
             batch?.PushMatrix(Matrix3x2.CreateRotation((float)time.Elapsed.TotalSeconds));
             batch?.Rectangle(-8, -8, 16, 16, Color.White);
             batch?.PopMatrix();
             
-            batch?.Present(Matrix4x4.CreateOrthographic(640, 480, 0, 1));
+            batch?.Present();
         };
 
         Project.Launch("Hello World", 640, 480);

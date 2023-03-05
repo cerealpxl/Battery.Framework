@@ -3,7 +3,7 @@ namespace Battery.Framework;
 /// <summary>
 ///     A surface that can be drawn to.
 /// </summary>
-public abstract class Surface : Graphic
+public abstract class Surface : RenderTarget, IDisposable
 {
     /// <summary>
     ///     The <see cref="Texture" /> attached to the canvas.
@@ -13,12 +13,12 @@ public abstract class Surface : Graphic
     /// <summary>
     ///     The width of the <see cref="Surface" />.
     /// </summary>
-    public int Width => Attachment.Width;
+    public override int Width => Attachment.Width;
 
     /// <summary>
     ///     The height of the <see cref="Surface" />.
     /// </summary>
-    public int Height => Attachment.Height;
+    public override int Height => Attachment.Height;
 
     /// <summary>
     ///     Creates a new instance of the <see cref="Surface" /> class.
@@ -32,6 +32,11 @@ public abstract class Surface : Graphic
         // Creates the texture attachment.
         Attachment = graphics.CreateTexture(new Image(width, height, Color.Transparent));
     }
+
+    /// <summary>
+    ///     Dispose this surface.
+    /// </summary>
+    public abstract void Dispose();
 
     /// <summary>
     ///     Transforms a integer rectangle to a float rectangle.

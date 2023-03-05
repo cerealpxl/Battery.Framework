@@ -115,30 +115,16 @@ public class OpenGLGraphics : GameGraphics
     /// <inheritdoc />
     public override void Present<T>(RenderPass<T> pass)
     {
-        // Bind the surface and assign the OpenGL viewport.
-        {
-            var viewport = pass.Viewport ?? new RectangleI(
-                0, 
-                0,
-                pass.Surface != null ? pass.Surface.Width  : Game.Platform.Width,
-                pass.Surface != null ? pass.Surface.Height : Game.Platform.Height
-            );
+        // Bind the Render Target of the pass and assign the OpenGL viewport.
+        var viewport = pass.Viewport ?? new RectangleI(
+            0, 
+            0,
+            pass.Target.Width,
+            pass.Target.Height
+        );
 
-            GL.glBindFramebuffer((pass.Surface is OpenGLSurface surface) ? surface.FramebufferID : 0u);
-            GL.glViewport(viewport.X, viewport.Y, viewport.Width, viewport.Height);
-        }
-
-        // Clear the current framebuffer.
-        if (pass.ClearColor is Color color && color.A > 0)
-        {
-            GL.glClearColor(
-                color.R / 255,
-                color.G / 255,
-                color.B / 255,
-                color.A / 255
-            );
-            GL.glClear(GL.GL_COLOR_BUFFER_BIT);
-        }
+        GL.glBindFramebuffer((pass.Target is OpenGLSurface surface) ? surface.FramebufferID : 0u);
+        GL.glViewport(viewport.X, viewport.Y, viewport.Width, viewport.Height);
 
         // Bind the shader and its uniforms.
         if (pass.Material.Shader is OpenGLShader shader)
@@ -243,16 +229,16 @@ public class OpenGLGraphics : GameGraphics
             GL.glBindVertexArray(0u);
         }
 
-        // Unbind the current surface.
+        // Sets the render target to the default.
         GL.glBindFramebuffer(0u);
     }
 
     /// <inheritdoc />
-    public override void Clear(Surface? surface, Color color)
+    public override void Clear(RenderTarget target, Color color)
     {
         var previousFramebuffer = GL.glGetIntegerv(GL.GL_FRAMEBUFFER_BINDING, 1);
     
-        GL.glBindFramebuffer(surface is OpenGLSurface glSurface ? glSurface.FramebufferID : 0u);
+        GL.glBindFramebuffer(target is OpenGLSurface glSurface ? glSurface.FramebufferID : 0u);
         GL.glClearColor(
             color.R / 255,
             color.G / 255,
