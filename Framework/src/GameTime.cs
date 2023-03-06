@@ -82,14 +82,14 @@ public struct GameTime
         => _stack.Push(_stopwatch.ElapsedMilliseconds);
     
     /// <summary>
-    ///     Pop the stored time and calcule the time since it.
+    ///     Pop the stacked time and measure the time since the push.
     /// </summary>
     /// <param name="text">The text to write in the console.</param>
     public void Pop(string text)
         => Console.WriteLine(text + $" [elapsed: {_stopwatch.ElapsedMilliseconds - Pop()}ms]");
 
     /// <summary>
-    ///     Pop the stacked time and return the calcule of the time since it.
+    ///     Pop the stacked time and measure the time since the push.
     /// </summary>
     public double Pop()
         => _stopwatch.ElapsedMilliseconds - _stack.Pop();
