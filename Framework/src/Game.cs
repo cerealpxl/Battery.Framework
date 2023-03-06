@@ -90,13 +90,15 @@ public class Game
         Exiting = false;
 
         // Assign time variables.
-        var stopwatch   = Stopwatch.StartNew();
         var accumulator = 0.0;
+
+        // We don't want the time of the Begin method.
+        Time.Update();
 
         while (Running)
         {
             Platform.Update();
-            Time.Update(stopwatch.Elapsed, Time.Elapsed);
+            Time.Update();
 
             // Snaps the delta time to a nice framerate.
             if (Math.Abs(Time.RawDelta - 1f / 120f) < 0.0002f) Time.RawDelta = 1f / 120f;

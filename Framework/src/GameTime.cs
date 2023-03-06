@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Battery.Framework;
 
 /// <summary>
@@ -40,6 +42,12 @@ public struct GameTime
     /// </summary>
     public float FrameRate = 60f;
 
+    // Stack that store some time values.
+    private Stack<double> _stack = new Stack<double>();
+
+    // Stopwatch used for timing operations.
+    private Stopwatch _stopwatch = Stopwatch.StartNew();
+
     /// <summary>
     ///     Creates a new instance of the <see cref="GameTime" /> struct.
     /// </summary>
@@ -50,12 +58,39 @@ public struct GameTime
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="elapsed"></param>
-    /// <param name="previousElapsed"></param>
-    internal void Update(TimeSpan elapsed, TimeSpan previousElapsed)
+    internal void Update()
     {
-        Elapsed         = elapsed;
-        PreviousElapsed = previousElapsed;
+        PreviousElapsed = Elapsed;
+        Elapsed         = _stopwatch.Elapsed;
         RawDelta        = (float)(Elapsed - PreviousElapsed).TotalSeconds;
     }
+
+    /// <summary>
+    ///     Pushes the current time to measure the duration of an event.
+    /// </summary>
+    /// <param name="text">The text to write in the console.</param>
+    public void Push(string text)
+    {
+        Console.WriteLine(text);
+        Pop();
+    }
+
+    /// <summary>
+    ///     Pushes the current time to measure the duration of an event.
+    /// </summary>
+    public void Push()
+        => _stack.Push(_stopwatch.ElapsedMilliseconds);
+    
+    /// <summary>
+    ///     Pop the stored time and calcule the time since it.
+    /// </summary>
+    /// <param name="text">The text to write in the console.</param>
+    public void Pop(string text)
+        => Console.WriteLine(text + $" [elapsed: {_stopwatch.ElapsedMilliseconds - Pop()}ms]");
+
+    /// <summary>
+    ///     Pop the stacked time and return the calcule of the time since it.
+    /// </summary>
+    public double Pop()
+        => _stopwatch.ElapsedMilliseconds - _stack.Pop();
 }
