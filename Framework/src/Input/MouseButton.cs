@@ -1,7 +1,7 @@
 namespace Battery.Framework;
 
 /// <summary>
-/// Enum containing mouse buttons.
+///     Represents a button of the mouse.
 /// </summary>
 public enum MouseButton
 {

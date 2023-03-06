@@ -126,6 +126,10 @@ public class SDLPlatform : GamePlatform, IPlatformWithOpenGL
     // Whether the window is visible.
     private bool _visible;
 
+    private IntPtr[] _cursors;
+
+    private MouseCursor _cursor;
+
     /// <summary>
     ///     Initializes a new instance of <see cref="SDLPlatform" /> class.
     /// </summary>
@@ -135,6 +139,9 @@ public class SDLPlatform : GamePlatform, IPlatformWithOpenGL
     {
         if (SDL.SDL_Init(SDL.SDL_INIT_EVERYTHING) != 0)
             throw new Exception(SDL.SDL_GetError());
+
+        _cursor  = MouseCursor.Arrow;
+        _cursors = new IntPtr[(int)SDL.SDL_SystemCursor.SDL_NUM_SYSTEM_CURSORS];
     }
 
     /// Finalize from the SDL.
@@ -233,15 +240,15 @@ public class SDLPlatform : GamePlatform, IPlatformWithOpenGL
 
                 // Keyboard events.
                 case SDL.SDL_EventType.SDL_KEYDOWN:
-                    Input.DoKeyDown(GetKey(SDL.SDL_GetKeyFromScancode(ev.key.keysym.scancode)));
+                    Keyboard.DoKeyDown(GetKey(SDL.SDL_GetKeyFromScancode(ev.key.keysym.scancode)));
                 break;
                 case SDL.SDL_EventType.SDL_KEYUP:
-                    Input.DoKeyUp(GetKey(SDL.SDL_GetKeyFromScancode(ev.key.keysym.scancode)));
+                    Keyboard.DoKeyUp(GetKey(SDL.SDL_GetKeyFromScancode(ev.key.keysym.scancode)));
                 break;
 
                 // Mouse events.
                 case SDL.SDL_EventType.SDL_MOUSEBUTTONDOWN:
-                    Input.DoMouseDown(ev.button.button switch {
+                    Mouse.DoMouseDown(ev.button.button switch {
                         (int)SDL.SDL_BUTTON_LEFT   => MouseButton.Left,
                         (int)SDL.SDL_BUTTON_MIDDLE => MouseButton.Middle,
                         (int)SDL.SDL_BUTTON_RIGHT  => MouseButton.Right,
@@ -250,7 +257,7 @@ public class SDLPlatform : GamePlatform, IPlatformWithOpenGL
                     });
                 break;
                 case SDL.SDL_EventType.SDL_MOUSEBUTTONUP:
-                    Input.DoMouseUp(ev.button.button switch {
+                    Mouse.DoMouseUp(ev.button.button switch {
                         (int)SDL.SDL_BUTTON_LEFT   => MouseButton.Left,
                         (int)SDL.SDL_BUTTON_MIDDLE => MouseButton.Middle,
                         (int)SDL.SDL_BUTTON_RIGHT  => MouseButton.Right,
@@ -259,7 +266,10 @@ public class SDLPlatform : GamePlatform, IPlatformWithOpenGL
                     });
                 break;
                 case SDL.SDL_EventType.SDL_MOUSEMOTION:
-                    Input.DoMouseMotion(ev.motion.x, ev.motion.y);
+                    Mouse.DoMouseMotion(ev.motion.x, ev.motion.y);
+                break;
+                case SDL.SDL_EventType.SDL_MOUSEWHEEL:
+                    Mouse.DoMouseWheel(ev.wheel.x, ev.wheel.y);
                 break;
             }
         }
@@ -278,6 +288,34 @@ public class SDLPlatform : GamePlatform, IPlatformWithOpenGL
             SDL.SDL_GL_SwapWindow(_window);
         }
     }
+
+    /// <inheritdoc />
+    public override void SetMouseCursor(MouseCursor cursor)
+    {
+        var type = cursor switch
+        {
+            MouseCursor.Arrow            => SDL.SDL_SystemCursor.SDL_SYSTEM_CURSOR_ARROW,
+            MouseCursor.IBeam            => SDL.SDL_SystemCursor.SDL_SYSTEM_CURSOR_IBEAM,
+            MouseCursor.CrossHair        => SDL.SDL_SystemCursor.SDL_SYSTEM_CURSOR_CROSSHAIR,
+            MouseCursor.Hand             => SDL.SDL_SystemCursor.SDL_SYSTEM_CURSOR_HAND,
+            MouseCursor.Wait             => SDL.SDL_SystemCursor.SDL_SYSTEM_CURSOR_WAIT,
+            MouseCursor.HorizontalResize => SDL.SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZEWE,
+            MouseCursor.VerticalResize   => SDL.SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZENS,
+
+            _ => throw new NotImplementedException()
+        };
+
+        if (_cursors[(int)type] == IntPtr.Zero)
+            _cursors[(int)type] = SDL.SDL_CreateSystemCursor(type);
+
+        SDL.SDL_SetCursor(_cursors[(int)type]);
+    
+        _cursor = cursor;
+    }
+
+    /// <inheritdoc />
+    public override MouseCursor GetMouseCursor()
+        => _cursor;
 
     #region OpenGL backend.
     
@@ -435,5 +473,4 @@ public class SDLPlatform : GamePlatform, IPlatformWithOpenGL
     }
 
     #endregion
-
 }

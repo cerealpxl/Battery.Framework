@@ -1,7 +1,7 @@
 namespace Battery.Framework;
 
 /// <summary>
-/// Key constants.
+///     Represents the keyboard keys.
 /// </summary>
 public enum KeyConstant
 {

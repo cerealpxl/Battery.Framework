@@ -9,6 +9,11 @@ namespace Battery.Framework;
 public class Game
 {
     /// <summary>
+    ///     The current game instance.
+    /// </summary>
+    public static Game? Instance { get; private set; }
+
+    /// <summary>
     ///     Whether the game is running.
     /// </summary>
     public static bool Running { get; private set; }
@@ -66,6 +71,7 @@ public class Game
     /// <param name="graphics">The <see cref="GameGraphics" /> to handle the graphics backend.</param>
     public Game(GamePlatform platform, GameGraphics? graphics = null)
     {
+        Instance = this;
         Platform = platform;
         Graphics = graphics ?? GameGraphics.CreateDefault(this);
     }
@@ -118,7 +124,8 @@ public class Game
                 if (Platform.Focused || RunWhileUnfocused)
                     OnUpdate?.Invoke(Time);
 
-                Input.Update();
+                Keyboard.Update();
+                Mouse.Update();
             }
 
             // Updates the time variables for the variable timestep.

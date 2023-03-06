@@ -104,4 +104,15 @@ public abstract class GamePlatform : RenderTarget
     ///     Presents the Draw Data to the window.
     /// </summary>
     public abstract void Present();
+
+    /// <summary>
+    ///     Sets the style of the mouse cursor.
+    /// </summary>
+    /// <param name="cursor">The style to set.</param>
+    public abstract void SetMouseCursor(MouseCursor cursor);
+
+    /// <summary>
+    ///     Gets the current style of the mouse cursor.
+    /// </summary>
+    public abstract MouseCursor GetMouseCursor();
 }
