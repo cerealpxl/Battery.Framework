@@ -16,11 +16,7 @@ public class Program
         {
             Project.Graphics.Clear(Project.Platform, Color.Black);
             batch?.Clear();
-
-            batch?.PushMatrix(Matrix3x2.CreateRotation((float)time.Elapsed.TotalSeconds));
             batch?.Rectangle(-8, -8, 16, 16, Color.White);
-            batch?.PopMatrix();
-            
             batch?.Present();
         };
 

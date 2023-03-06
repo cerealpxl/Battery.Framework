@@ -449,15 +449,33 @@ public class Batch
     public void Line(Vector2 from, Vector2 to, Color color, float thickness = 1f)
     {
         var normal        = Vector2.Normalize(from - to);
-        var perpendicular = new Vector2(-normal.Y, normal.X) * thickness * .5f;
+        var perpendicular = normal.TurnLeft() * thickness * .5f;
 
         Quad(
             from + perpendicular,
-            from - perpendicular,
-            to - perpendicular,
             to + perpendicular,
+            to - perpendicular,
+            from - perpendicular,
             color
         );
+    }
+
+    /// <summary>
+    ///     Draws lines.
+    /// </summary>
+    /// <param name="points">Array storing the line points.</param>
+    /// <param name="color">Color of the lines.</param>
+    /// <param name="thickness">Thickness of the line.</param>
+    public void Line(Vector2[] points, Color color, float thickness = 1f)
+    {
+        if (points.Length <= 1)
+            return;
+
+        for (int i = 0; i < points.Length; i ++)
+        {
+            if (points.Length > i + 1)
+                Line(points[i], points[i + 1], color, thickness);
+        }
     }
 
     #endregion
@@ -502,7 +520,7 @@ public class Batch
     }
 
     #endregion
-    
+
     #region Draws a Triangle
     
     /// <summary>
@@ -901,6 +919,37 @@ public class Batch
 
         SetTexture(texture);
         Quad(v0, v1, v2, v3, a, b, c, d, blend ?? Color.White, washed);
+    }
+
+    #endregion
+
+    #region Draws a Sine Wave
+
+    /// <summary>
+    ///     Draws a sine wave.
+    /// </summary>
+    /// <param name="x">The horizontal offset of the wave.</param>
+    /// <param name="y">The vertical offset of the wave.</param>
+    /// <param name="width">The width of the wave.</param>
+    /// <param name="height">The height of the wave.</param>
+    /// <param name="color">The color of the wave.</param>
+    /// <param name="frequency">The frequency of the wave.</param>
+    /// <param name="steps">The number of steps</param>
+    public void SineWave(float x, float y, float width, float height, Color color, float offset = 0f, float frequency = 0.5f, int steps = 64)
+    {
+        var position = new Vector2(x, y);
+        for (int i = 0; i < steps; i ++)
+        {
+            var xx  = i * (width/steps);
+            var yy1 = height * MathF.Sin( i      * frequency + offset);
+            var yy2 = height * MathF.Sin((i + 1) * frequency + offset);
+
+            Line(
+                position + new Vector2(xx,                              yy1),
+                position + new Vector2(xx + MathF.Ceiling(width/steps), yy2),
+                color
+            );
+        }
     }
 
     #endregion
