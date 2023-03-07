@@ -82,14 +82,14 @@ public class Image
     ///     Load the image from a file in the given path.
     /// </summary>
     /// <param name="path">The path to the file.</param>
-    public static unsafe Image FromFile(string file)
+    public static Image FromFile(string file)
         => FromStream(File.OpenRead(file));
 
     /// <summary>
     ///     Loads the image from the specified file stream.
     /// </summary>
     /// <param name="stream">The file stream to use.</param>
-    public static unsafe Image FromStream(FileStream stream)
+    public static Image FromStream(FileStream stream)
     {
         // Assign variables.
         var rawImage = ImageResult.FromStream(stream, StbImageSharp.ColorComponents.RedGreenBlueAlpha);
@@ -134,5 +134,58 @@ public class Image
         }
 
         File.WriteAllBytes(file, stream.ToArray());
+    }
+
+    /// <summary>
+    ///     Sets the image pixels at the given destination.
+    /// </summary>
+    /// <param name="data">The data to set.</param>
+    /// <param name="destination">The destination of the pixel data.</param>
+    public void SetPixels(Memory<Color> data, RectangleI destination)
+    {
+        var src = data.Span;
+        var dst = new Span<Color>(Data);
+
+        for (int y = 0; y < destination.Height; y ++)
+        {
+            var from = src.Slice(y * destination.Width, destination.Width);
+            var to   = dst.Slice(destination.X + (destination.Y + y) * Width, destination.Width);
+
+            from.CopyTo(to);
+        }
+    }
+
+    /// <summary>
+    ///     Gets a pixel area in the bitmap.
+    /// </summary>
+    /// <param name="destination">The memory to assign with the pixels.</param>
+    /// <param name="destinationRect"></param>
+    /// <param name="sourceRect"></param>
+    public void GetPixels(Memory<Color> destination, RectangleI destinationRect, RectangleI sourceRect)
+    {
+        var src = new Span<Color>(Data);
+        var dst = destination.Span;
+
+        // Can't be outside of the source image.
+        if (sourceRect.Left   < 0)      sourceRect.X      = 0;
+        if (sourceRect.Top    < 0)      sourceRect.Y      = 0;
+        if (sourceRect.Right  > Width)  sourceRect.Width  = Width - sourceRect.X;
+        if (sourceRect.Bottom > Height) sourceRect.Height = Height - sourceRect.Y;
+
+        // Can't be larger than our destination.
+        if (sourceRect.Width > destinationRect.Width - destinationRect.X)
+            sourceRect.Width = destinationRect.Width - destinationRect.X;
+
+        if (sourceRect.Height > destinationRect.Height - destinationRect.Y)
+            sourceRect.Height = destinationRect.Height - destinationRect.Y;
+
+        // Fiinally, gets the pixel data.
+        for (int y = 0; y < sourceRect.Height; y++)
+        {
+            var from = src.Slice(sourceRect.X      + (sourceRect.Y      + y) * Width,                 sourceRect.Width);
+            var to   = dst.Slice(destinationRect.X + (destinationRect.Y + y) * destinationRect.Width, sourceRect.Width);
+
+            from.CopyTo(to);
+        }
     }
 }
