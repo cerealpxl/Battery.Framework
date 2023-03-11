@@ -64,7 +64,6 @@ public class RenderSystem : ComponentSystem
 
         // Render all the game cameras.
         var graphics = Game.Instance.Graphics;
-        var batch    = Game.Instance.Graphics.Batch;
 
         // Loop and draw the renderers to every camera in the system.
         foreach (var camera in Cameras)
@@ -74,7 +73,7 @@ public class RenderSystem : ComponentSystem
 
             // Sets the camera surface then draw the renderers.
             graphics.Clear(camera.Surface, camera.ClearColor);
-            batch?.PushTarget(camera.Surface, camera.Matrix);
+            graphics.Batch?.PushTarget(camera.Surface, camera.Matrix);
 
             foreach (var renderer in Renderers)
             {
@@ -94,7 +93,7 @@ public class RenderSystem : ComponentSystem
                     renderer.RenderEnd(time);
             }
 
-            batch?.PopTarget();
+            graphics.Batch?.PopTarget();
             CurrentCamera = camera;
         }
 
@@ -102,7 +101,7 @@ public class RenderSystem : ComponentSystem
         foreach (var camera in Cameras)
         {
             if (camera.Visible)
-                batch?.Texture(camera.Surface, Vector2.Zero);
+                graphics.Batch?.Texture(camera.Surface, Vector2.Zero);
         }
     }
 

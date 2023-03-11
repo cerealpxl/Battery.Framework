@@ -1,13 +1,20 @@
-﻿using System.Numerics;
-using Battery.Framework;
+﻿using Battery.Framework;
 using Battery.Framework.SDL2;
 
 namespace HelloWorld;
 
 public class Program
 {
+    /// <summary>
+    ///     The Game instance.
+    /// </summary>
     public static Game Project = new Game(new SDLPlatform());
-    public static void Main(string[] args)
+
+    /// <summary>
+    ///     Runs the Hello World.
+    ///     Draws a white rectangle to the screen.
+    /// </summary>
+    public static void Main()
     {
         Batch? batch = null;
 
@@ -16,7 +23,7 @@ public class Program
         {
             Project.Graphics.Clear(Project.Platform, Color.Black);
             batch?.Clear();
-            batch?.Rectangle(-8, -8, 16, 16, Color.White);
+            batch?.Rectangle(8, 8, 16, 16, Color.White);
             batch?.Present();
         };
 
