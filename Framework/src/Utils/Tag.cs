@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 
-namespace Battery;
+namespace Battery.Framework;
 
 /// <summary>
 ///     Interface used to tagged classes.

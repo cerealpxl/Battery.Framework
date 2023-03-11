@@ -164,6 +164,12 @@ public class Scene
     }
 
     /// <summary>
+    ///     Adds a <see cref="ComponentSystem" /> to the Scene.
+    /// </summary>
+    public T AddSystem<T>() where T : ComponentSystem, new()
+        => AddSystem(new T());
+
+    /// <summary>
     ///     Gets a <see cref="ComponentSystem" /> that matches the given type.
     /// </summary>
     public T? GetSystem<T>()
@@ -220,6 +226,12 @@ public class Scene
         
         return entity;
     }
+    /// <summary>
+    ///     Adds a <see cref="Entity" /> to the Scene.
+    /// </summary>
+    public T AddEntity<T>() where T : Entity, new()
+        => AddEntity(new T());
+
 
     /// <summary>
     ///     Gets a <see cref="Entity" /> that matches the given type in the sSene.
