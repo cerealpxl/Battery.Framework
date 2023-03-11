@@ -104,13 +104,18 @@ public class OpenGLGraphics : GameGraphics
         GL.glDisable(GL.GL_DEPTH_TEST);
         GL.glEnable(GL.GL_BLEND);
         GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+
+        base.Begin();
     }
 
     /// <summary>
     ///     Ends the OpenGl graphics.
     /// </summary>
     public override void End()
-        => _context?.Dispose();
+    {
+        base.End();
+        _context?.Dispose();
+    }
 
     /// <inheritdoc />
     public override void Present<T>(RenderPass<T> pass)

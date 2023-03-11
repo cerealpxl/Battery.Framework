@@ -11,13 +11,17 @@ public abstract class GameGraphics
     public Game Game { get; private set; }
 
     /// <summary>
+    ///     The default batcher used by the graphics.
+    /// </summary>
+    public Batch? Batch { get; internal set; }
+
+    /// <summary>
     ///     Initialize a new instance of the <see cref="GameGraphics" /> class. 
     /// </summary>
     /// <param name="game">The game to which the graphics belongs to.</param>
     public GameGraphics(Game game)
-    {
-        Game = game;
-    }
+        => Game = game;
+
     /// <summary>
     ///     Creates the default graphics device.
     /// </summary>
@@ -59,12 +63,14 @@ public abstract class GameGraphics
     /// <summary>
     ///     Called to begin the graphics after the platform initialization.
     /// </summary>
-    public abstract void Begin();
+    public virtual void Begin()
+        => Batch = new Batch(Game);
 
     /// <summary>
     ///     Called to end the graphics.
     /// </summary>
-    public abstract void End();
+    public virtual void End()
+        => Batch = null;
 
     /// <summary>
     ///     Presents the given <see cref="RenderPass" />.

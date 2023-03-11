@@ -3,7 +3,7 @@ namespace Battery.Framework;
 /// <summary>
 ///     Game Manager, used to setup callbacks of the Game Events.
 /// </summary>
-public abstract class GameManager
+public abstract class GameManager : IComparable<GameManager>
 {
     /// <summary>
     ///     Whether the Update methods can be called.
@@ -14,6 +14,11 @@ public abstract class GameManager
     ///     Whether the Render methods can be called.
     /// </summary>
     public bool Visible = true;
+
+    /// <summary>
+    ///     The priority of the manager in the order of callbacks.
+    /// </summary>
+    public int Priority = 1000;
 
     /// <summary>
     ///     Called when the Game begins.
@@ -58,4 +63,11 @@ public abstract class GameManager
     public virtual void RenderEnd(GameTime time)
     {
     }
+
+    /// <summary>
+    ///     Comparison method.
+    /// </summary>
+    /// <param name="other">The other manager to compare.</param>
+    int IComparable<GameManager>.CompareTo(GameManager? other)
+        => (other == null ? 0 : other.Priority) - this.Priority;
 }

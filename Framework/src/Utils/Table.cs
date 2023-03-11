@@ -71,26 +71,35 @@ public class Table<T> : IEnumerable where T : class
     }
 
     /// <summary>
-    /// Determines whether an element is in the table. 
+    ///     Determines whether an element is in the table. 
     /// </summary>
     /// <param name="element">The element to check.</param>
     public bool Contains(T element) 
         => Values.Contains(element);
 
     /// <summary>
-    /// Sorts the table.
+    ///     Sorts the table.
     /// </summary>
-    /// <param name="comparer"></param>
+    /// <param name="comparer">Method that compare the values.</param>
     public void Sort(IComparer<T> comparer) 
         => Values.Sort(comparer);
 
     /// <summary>
-    /// Sorts the table.
+    ///     Sorts the table.
     /// </summary>
-    /// <param name="comparer"></param>
+    /// <param name="comparer">Method that compare the values.</param>
     public void Sort(Comparison<T> comparer) 
         => Values.Sort(comparer);
 
+    /// <summary>
+    ///     Sorts the table.
+    /// </summary>
+    public void Sort() 
+        => Values.Sort();
+
+    /// <summary>
+    ///     Clear the elements of the table.
+    /// </summary>
     public void Clear()
     {
         Values.Clear();
@@ -98,14 +107,14 @@ public class Table<T> : IEnumerable where T : class
     }
     
     /// <summary>
-    /// 
+    ///     Gets the index of an element in the Table.
     /// </summary>
-    /// <param name="element"></param>
+    /// <param name="element">The element to get.</param>
     public int IndexOf(T element)
         => Values.IndexOf(element);
 
     /// <summary>
-    /// Returns the IEnumerator function.
+    ///     Returns the IEnumerator function.
     /// </summary>
     public IEnumerator<T> GetEnumerator()
     {
@@ -116,7 +125,7 @@ public class Table<T> : IEnumerable where T : class
     }
 
     /// <summary>
-    /// IEnumerator function. Used in foreach.
+    ///     IEnumerator function. Used in foreach.
     /// </summary>
     IEnumerator IEnumerable.GetEnumerator() 
         => GetEnumerator();

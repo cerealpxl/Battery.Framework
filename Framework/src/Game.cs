@@ -231,6 +231,7 @@ public class Game
     public T Add<T>(T manager) where T : GameManager
     {
         Managers.Add(manager);
+        Managers.Sort();
 
         if (Running)
             manager.Begin();
