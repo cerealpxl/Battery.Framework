@@ -1,3 +1,4 @@
+using System.Numerics;
 using Battery.Framework;
 
 namespace Battery.Engine;
@@ -13,6 +14,16 @@ public class RenderSystem : ComponentSystem
     public Table<IRenderer> Renderers = new Table<IRenderer>();
 
     /// <summary>
+    ///     The table that stores all the cameras of the system.
+    /// </summary>
+    public Table<Camera> Cameras = new Table<Camera>();
+
+    /// <summary>
+    ///     The last camera rendered by the System.
+    /// </summary>
+    public Camera? CurrentCamera;
+
+    /// <summary>
     ///     Creates a new Render System.
     /// </summary>
     public RenderSystem()
@@ -20,24 +31,86 @@ public class RenderSystem : ComponentSystem
     {
     }
 
+    /// <inheritdoc />
+    public override void Begin()
+    {
+        if (Cameras.Count == 0 && Game.Instance != null)
+        {
+            Cameras.Add(new Camera(
+                Game.Instance.Graphics, 
+                Game.Instance.Platform.Width,
+                Game.Instance.Platform.Height
+            ));
+        }
+        
+        base.Begin();
+    }
+
+    /// <inheritdoc />
+    public override void RenderBegin(GameTime time)
+    {
+        if (Game.Instance is Game)
+            Game.Instance.Graphics.Batch?.Clear();
+    }
+
     /// <summary>
     ///     Renders all the renderable components to the enabled cameras.
     /// </summary>
-    public override void Render()
+    /// <param name="time">The <see cref="GameTime" /> struct.</param>
+    public override void Render(GameTime time)
     {
-        if (!(Game.Instance is Game game))
+        if (!(Game.Instance is Game))
             return;
 
-        // Draws the renderers to the Batcher.
-        game.Graphics.Batch?.Clear();
+        // Render all the game cameras.
+        var graphics = Game.Instance.Graphics;
+        var batch    = Game.Instance.Graphics.Batch;
 
-        foreach (var renderer in Renderers)
+        // Loop and draw the renderers to every camera in the system.
+        foreach (var camera in Cameras)
         {
-            if (renderer.Visible)
-                renderer.Render();
+            if (!camera.Enabled)
+                continue;
+
+            // Sets the camera surface then draw the renderers.
+            graphics.Clear(camera.Surface, camera.ClearColor);
+            batch?.PushTarget(camera.Surface, camera.Matrix);
+
+            foreach (var renderer in Renderers)
+            {
+                if (renderer.Visible)
+                    renderer.RenderBegin(time);
+            }
+
+            foreach (var renderer in Renderers)
+            {
+                if (renderer.Visible)
+                    renderer.Render(time);
+            }
+
+            foreach (var renderer in Renderers)
+            {
+                if (renderer.Visible)
+                    renderer.RenderEnd(time);
+            }
+
+            batch?.PopTarget();
+            CurrentCamera = camera;
         }
 
-        game.Graphics.Batch?.Present();
+        // Render all the game cameras.
+        foreach (var camera in Cameras)
+        {
+            if (camera.Visible)
+                batch?.Texture(camera.Surface, Vector2.Zero);
+        }
+    }
+
+    /// <inheritdoc />
+    public override void RenderEnd(GameTime time)
+    {
+        if (Game.Instance is Game)
+            Game.Instance.Graphics.Batch?.Present();
     }
 
     /// <inheritdoc/>

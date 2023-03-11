@@ -30,7 +30,7 @@ public class Renderer : Component, IRenderer
     }
 
     /// <summary>
-    ///     Creates a new renderer.
+    ///     Creates a new instance of the <see cref="Renderer" /> component.
     /// </summary>
     /// <param name="tags">The tags of the renderer.</param>
     /// <param name="visible">Whether the component starts visible.</param>
@@ -41,7 +41,17 @@ public class Renderer : Component, IRenderer
     }
 
     /// <inheritdoc/>
-    public virtual void Render()
+    public virtual void RenderBegin(GameTime time)
+    {
+    }
+
+    /// <inheritdoc/>
+    public virtual void Render(GameTime time)
+    {
+    }
+
+    /// <inheritdoc/>
+    public virtual void RenderEnd(GameTime time)
     {
     }
 }

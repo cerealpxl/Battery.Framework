@@ -60,13 +60,6 @@ public abstract class ComponentSystem : ITagged
     }
 
     /// <summary>
-    ///     Do game logic here. Called in every fixed step.
-    /// </summary>
-    public virtual void Update()
-    {
-    }
-
-    /// <summary>
     ///     Called when the <see cref="Battery.Engine.Scene"/> ends or when removed after the <see cref="Battery.Engine.Scene"/> begins.
     /// </summary>
     public virtual void End()
@@ -74,23 +67,35 @@ public abstract class ComponentSystem : ITagged
     }
 
     /// <summary>
-    ///     Do drawing operations here. Called before the <see cref="Render"/> method.
+    ///     Called in every fixed timestep of the <see cref="Battery.Engine.Scene"/>.
     /// </summary>
-    public virtual void RenderBegin()
+    /// <param name="time">The <see cref="GameTime" /> struct.</param>
+    public virtual void Update(GameTime time)
+    {
+    }
+
+
+    /// <summary>
+    ///     Called before the Render method.
+    /// </summary>
+    /// <param name="time">The <see cref="GameTime" /> struct.</param>
+    public virtual void RenderBegin(GameTime time)
     {
     }
 
     /// <summary>
-    ///     Do drawing operations here. Called in the Render state.
+    ///     Called to render the system to the screen.
     /// </summary>
-    public virtual void Render()
+    /// <param name="time">The <see cref="GameTime" /> struct.</param>
+    public virtual void Render(GameTime time)
     {
     }
 
     /// <summary>
-    ///     Do drawing operations here. Called after the <see cref="Render"/> method.
+    ///     Called after the Render method.
     /// </summary>
-    public virtual void RenderEnd()
+    /// <param name="time">The <see cref="GameTime" /> struct.</param>
+    public virtual void RenderEnd(GameTime time)
     {
     }
 

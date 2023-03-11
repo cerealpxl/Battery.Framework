@@ -65,7 +65,7 @@ public class Scene
         foreach (var system in Systems)
         {
             if (system.Active)
-                system.Update();
+                system.Update(time);
         }
     }
 
@@ -78,7 +78,7 @@ public class Scene
         foreach (var system in Systems)
         {
             if (system.Visible)
-                system.RenderBegin();
+                system.RenderBegin(time);
         }
     }
 
@@ -91,7 +91,7 @@ public class Scene
         foreach (var system in Systems)
         {
             if (system.Visible)
-                system.Render();
+                system.Render(time);
         }
     }
 
@@ -104,7 +104,7 @@ public class Scene
         foreach (var system in Systems)
         {
             if (system.Visible)
-                system.RenderEnd();
+                system.RenderEnd(time);
         }
     }
 
