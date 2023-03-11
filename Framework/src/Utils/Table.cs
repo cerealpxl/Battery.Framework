@@ -57,7 +57,7 @@ public class Table<T> : IEnumerable where T : class
     /// <summary>
     ///     Gets an element in the list that matches the given argument.
     /// </summary>
-    public U? Get<U>() where U : class
+    public U? Get<U>()
     {
         // Loop for every element in the table and check if the element matches the given type.
         foreach (var toCheck in Values)
@@ -67,7 +67,7 @@ public class Table<T> : IEnumerable where T : class
         }
 
         // No element with the given type in this table.
-        return null;
+        return default(U?);
     }
 
     /// <summary>
