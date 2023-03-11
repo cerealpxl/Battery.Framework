@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Numerics;
 using Battery.Framework;
 
 namespace Battery.Engine;
@@ -32,6 +33,29 @@ public class Entity : IEnumerable<Component>
     ///     A table storing all the components.
     /// </summary>
     public Table<Component> Components = new Table<Component>();
+
+    /// <summary>
+    ///     The position of the Entity.
+    /// </summary>
+    public Vector2 Position;
+
+    /// <summary>
+    ///     The horizontal position of the Entity.
+    /// </summary>
+    public float X
+    {
+        get => Position.X;
+        set => Position.X = value;
+    }
+
+    /// <summary>
+    ///     The vertical position of the Entity.
+    /// </summary>
+    public float Y
+    {
+        get => Position.Y;
+        set => Position.Y = value;
+    }
     
     /// <summary>
     ///     Creates a new instance of the <see cref="Entity" /> class.
