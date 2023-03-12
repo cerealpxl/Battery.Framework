@@ -1,4 +1,4 @@
-﻿namespace Battery;
+﻿namespace Battery.Framework;
 
 /// <summary>
 ///     Calcule functions.
