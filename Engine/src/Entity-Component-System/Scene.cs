@@ -59,7 +59,6 @@ public class Scene
     /// <summary>
     ///     Execute all the Update callbacks of the Component Systems.
     /// </summary>
-    /// <param name="time">The <see cref="GameTime" /> structure.</param>
     public virtual void Update()
     {
         foreach (var system in Systems)
@@ -72,7 +71,6 @@ public class Scene
     /// <summary>
     ///     Execute all the Render Begin callbacks, before the Render method.
     /// </summary>
-    /// <param name="time">The <see cref="GameTime" /> structure.</param>
     public virtual void RenderBegin()
     {
         foreach (var system in Systems)
@@ -85,7 +83,6 @@ public class Scene
     /// <summary>
     ///     Execute all the Render callbacks of the Component Systems.
     /// </summary>
-    /// <param name="time">The <see cref="GameTime" /> structure.</param>
     public virtual void Render()
     {
         foreach (var system in Systems)
@@ -98,7 +95,6 @@ public class Scene
     /// <summary>
     ///     Execute all the Render End callbacks, after the Render method.
     /// </summary>
-    /// <param name="time">The <see cref="GameTime" /> structure.</param>
     public virtual void RenderEnd()
     {
         foreach (var system in Systems)

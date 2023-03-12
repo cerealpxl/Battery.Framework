@@ -193,7 +193,6 @@ public class Game
     /// <summary>
     ///     Performs the Render events of the game and managers.
     /// </summary>
-    /// <param name="time">The <see cref="GameTime" /> structure.</param>
     public virtual void Render()
     {
         foreach (var manager in Managers)

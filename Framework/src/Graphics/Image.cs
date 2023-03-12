@@ -4,7 +4,8 @@ using StbImageWriteSharp;
 namespace Battery.Framework;
 
 /// <summary>
-///     Class that stores a 2D image.
+///     Represents a 2D Image.
+///     Provides methods to create and manipulate an image.
 /// </summary>
 public class Image
 {
@@ -19,12 +20,12 @@ public class Image
     public int Height { get; private set; }
 
     /// <summary>
-    ///     Array that store the pixel data of the Image.
+    ///     An array that store the pixel data of the Image.
     /// </summary>
     public Color[] Data { get; private set; }
 
     /// <summary>
-    ///     Creates a image with the given color array.
+    ///     Creates a new instance of <see cref="Image"/> with the given pixels array.
     /// </summary>
     /// <param name="width">The Width of the Image.</param>
     /// <param name="height">The Height of the Image.</param>
@@ -44,7 +45,7 @@ public class Image
     }
 
     /// <summary>
-    ///     Creates an empty image filled with the given color.
+    ///     Creates a new instance of <see cref="Image"/> filled with the given color.
     /// </summary>
     /// <param name="width">The Width of the Image.</param>
     /// <param name="height">The Height of the Image.</param>
@@ -62,8 +63,8 @@ public class Image
     }
 
     /// <summary>
-    ///     Creates a image by using the given byte data.
-    ///     Used when creating a Font Char.
+    ///     Creates a new instance of <see cref="Image"/> by using the given byte data.
+    ///     A single byte represents the value of all the color components.
     /// </summary>
     /// <param name="width">The Width of the image.</param>
     /// <param name="height">The Height of the image.</param>
@@ -79,16 +80,18 @@ public class Image
     }
 
     /// <summary>
-    ///     Load the image from a file in the given path.
+    ///     Load the image from a PNG file in the specified path.
     /// </summary>
     /// <param name="path">The path to the file.</param>
-    public static Image FromFile(string file)
-        => FromStream(File.OpenRead(file));
+    public static Image FromFile(string path)
+    {
+        return FromStream(File.OpenRead(path));
+    }
 
     /// <summary>
-    ///     Loads the image from the specified file stream.
+    ///     Loads the image from the given File Stream.
     /// </summary>
-    /// <param name="stream">The file stream to use.</param>
+    /// <param name="stream">The File Stream to use.</param>
     public static Image FromStream(FileStream stream)
     {
         // Assign variables.
@@ -107,10 +110,10 @@ public class Image
     }
 
     /// <summary>
-    ///     Saves the Image to a PNG File.
+    ///     Saves the Image to a PNG file in the specified path.
     /// </summary>
-    /// <param name="file">Location of the file.</param>
-    public void Save(string file)
+    /// <param name="path">The location of the file.</param>
+    public void Save(string path)
     {
         var stream = new MemoryStream();
         var writer = new ImageWriter();
@@ -133,7 +136,7 @@ public class Image
             }
         }
 
-        File.WriteAllBytes(file, stream.ToArray());
+        File.WriteAllBytes(path, stream.ToArray());
     }
 
     /// <summary>

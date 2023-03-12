@@ -21,19 +21,16 @@ public interface IRenderer : ITagged
     /// <summary>
     ///     Called before the Render method.
     /// </summary>
-    /// <param name="time">The <see cref="GameTime" /> struct.</param>
     abstract void RenderBegin();
 
     /// <summary>
     ///     Called to render the component to the screen.
     /// </summary>
-    /// <param name="time">The <see cref="GameTime" /> struct.</param>
     abstract void Render();
 
     /// <summary>
     ///     Called after the Render method.
     /// </summary>
-    /// <param name="time">The <see cref="GameTime" /> struct.</param>
     abstract void RenderEnd();
 }
 

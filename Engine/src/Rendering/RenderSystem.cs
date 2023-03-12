@@ -56,7 +56,6 @@ public class RenderSystem : ComponentSystem
     /// <summary>
     ///     Renders all the renderable components to the enabled cameras.
     /// </summary>
-    /// <param name="time">The <see cref="GameTime" /> struct.</param>
     public override void Render()
     {
         if (!(Game.Instance is Game))
@@ -74,27 +73,27 @@ public class RenderSystem : ComponentSystem
             // Sets the camera surface then draw the renderers.
             graphics.Clear(camera.Surface, camera.ClearColor);
             graphics.Batch?.PushTarget(camera.Surface, camera.Matrix);
+            CurrentCamera = camera;
 
             foreach (var renderer in Renderers)
             {
-                if (renderer.Visible)
+                if (renderer.Visible && Tag.ContainsAny(renderer.Tag))
                     renderer.RenderBegin();
             }
 
             foreach (var renderer in Renderers)
             {
-                if (renderer.Visible)
+                if (renderer.Visible && Tag.ContainsAny(renderer.Tag))
                     renderer.Render();
             }
 
             foreach (var renderer in Renderers)
             {
-                if (renderer.Visible)
+                if (renderer.Visible && Tag.ContainsAny(renderer.Tag))
                     renderer.RenderEnd();
             }
 
             graphics.Batch?.PopTarget();
-            CurrentCamera = camera;
         }
 
         // Render all the game cameras.
