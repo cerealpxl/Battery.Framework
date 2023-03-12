@@ -1,12 +1,12 @@
 namespace Battery.Framework;
 
 /// <summary>
-///     A structure used to pass the shader state to a Render Call.
+///     Hold values that define the state of a Shader, used for rendering.
 /// </summary>
 public class ShaderMaterial
 {
     /// <summary>
-    ///     Shader to use.
+    ///     The shader assigned to the Material.
     /// </summary>
     public Shader Shader { get; private set; }
     
@@ -16,17 +16,17 @@ public class ShaderMaterial
     /// <summary>
     ///     Creates a new instance of the <see cref="ShaderMaterial" /> class.
     /// </summary>
-    /// <param name="shader">Shader to use.</param>
+    /// <param name="shader">The shader to use.</param>
     public ShaderMaterial(Shader shader)
     {
         Shader = shader;
     }
 
     /// <summary>
-    /// Add a uniform to the ShaderMaterial.
+    ///     Adds a uniform to the Shader Material.
     /// </summary>
     /// <param name="name">The name of the uniform.</param>
-    /// <param name="value">The ShaderMaterial of the uniform.</param>
+    /// <param name="value">The value of the uniform.</param>
     public void SetUniform(string name, object? value)
     {
         if (_uniforms.ContainsKey(name))
@@ -39,7 +39,7 @@ public class ShaderMaterial
     }
 
     /// <summary>
-    /// Gets a uniform in the ShaderMaterial.
+    ///     Gets a uniform in the ShaderMaterial.
     /// </summary>
     /// <param name="name">The name of the uniform.</param>
     public object? GetUniform(string name)

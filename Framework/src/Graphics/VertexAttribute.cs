@@ -1,7 +1,7 @@
 namespace Battery.Framework;
 
 /// <summary>
-///     Describes a single vertex attribute.
+///     Describes a single Vertex Attribute.
 /// </summary>
 public struct VertexAttribute
 {

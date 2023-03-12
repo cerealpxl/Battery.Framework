@@ -19,17 +19,17 @@ public abstract class GamePlatform : RenderTarget
     public abstract string Title { get; set; }
 
     /// <summary>
-    ///     The dimensions of the window.
+    ///     The Width and Height of the Window, in Pixels.
     /// </summary>
     public abstract Vector2 Dimensions { get; set; }
 
     /// <summary>
-    ///     The width of the window.
+    ///     The Width of the Window, in Pixels.
     /// </summary>
     public override int Width => (int)Dimensions.X;
 
     /// <summary>
-    ///     The height of the window.
+    ///     The Height of the Window, in Pixels.
     /// </summary>
     public override int Height => (int)Dimensions.Y;
 
@@ -81,13 +81,13 @@ public abstract class GamePlatform : RenderTarget
     /// <summary>
     ///     Begins the Window Platform.
     /// </summary>
-    /// <param name="game">The game instance to witch the platform belongs to.</param>
-    /// <param name="title">The title of the window.</param>
-    /// <param name="width">The width of the window.</param>
-    /// <param name="height">The height of the window.</param>
-    /// <param name="fullscreen">Whether the window starts in the fullscreen mode.</param>
-    /// <param name="borderless">Whether the window starts without a border.</param>
-    /// <param name="vsync">Whether the window starts with the vertical synchronization enabled.</param>
+    /// <param name="game">The Game instance to which the Platform belongs to.</param>
+    /// <param name="title">The Title of the Window.</param>
+    /// <param name="width">The Width of the Window.</param>
+    /// <param name="height">The Height of the Window.</param>
+    /// <param name="fullscreen">Whether the Window starts in the fullscreen mode.</param>
+    /// <param name="borderless">Whether the Window starts without a border.</param>
+    /// <param name="vsync">Whether the Window starts with the vertical synchronization enabled.</param>
     public abstract void Begin(Game game, string title, int width, int height, bool fullscreen = false, bool borderless = false, bool vsync = false);
 
     /// <summary>

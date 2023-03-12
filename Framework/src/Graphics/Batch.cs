@@ -566,8 +566,8 @@ public class Batch
     /// </summary>
     /// <param name="x">The horizontal position of the rectangle.</param>
     /// <param name="y">The vertical position of the rectangle.</param>
-    /// <param name="width">The width of the rectangle.</param>
-    /// <param name="height">The height of the rectangle.</param>
+    /// <param name="width">The Width of the rectangle.</param>
+    /// <param name="height">The Height of the rectangle.</param>
     /// <param name="color">The color of the rectangle.</param>
     public void Rectangle(float x, float y, float width, float height, Color color)
     {
@@ -611,8 +611,8 @@ public class Batch
     /// </summary>
     /// <param name="x">The horizontal position of the rectangle.</param>
     /// <param name="y">The vertical position of the rectangle.</param>
-    /// <param name="width">The width of the rectangle.</param>
-    /// <param name="height">The height of the rectangle.</param>
+    /// <param name="width">The Width of the rectangle.</param>
+    /// <param name="height">The Height of the rectangle.</param>
     /// <param name="color">The color of the rectangle.</param>
     public void DashedRectangle(float x, float y, float width, float height, Color color, float length = 4, float offset = 0)
     {
@@ -653,8 +653,8 @@ public class Batch
     /// </summary>
     /// <param name="x">The horizontal position of the rectangle.</param>
     /// <param name="y">The vertical position of the rectangle.</param>
-    /// <param name="width">The width of the rectangle.</param>
-    /// <param name="height">The height of the rectangle.</param>
+    /// <param name="width">The Width of the rectangle.</param>
+    /// <param name="height">The Height of the rectangle.</param>
     /// <param name="color">The color of the rectangle.</param>
     public void HollowRectangle(float x, float y, float width, float height, Color color)
     {
@@ -930,8 +930,8 @@ public class Batch
     /// </summary>
     /// <param name="x">The horizontal offset of the wave.</param>
     /// <param name="y">The vertical offset of the wave.</param>
-    /// <param name="width">The width of the wave.</param>
-    /// <param name="height">The height of the wave.</param>
+    /// <param name="width">The Width of the wave.</param>
+    /// <param name="height">The Height of the wave.</param>
     /// <param name="color">The color of the wave.</param>
     /// <param name="frequency">The frequency of the wave.</param>
     /// <param name="steps">The number of steps</param>

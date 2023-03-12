@@ -4,27 +4,27 @@ using System.Text.Json.Serialization;
 namespace Battery.Framework;
 
 /// <summary>
-///     Structure that represents a 2D Rectangle.
+///     A structure that represents a 2D Rectangle.
 /// </summary>
 public struct Rectangle
 {
     /// <summary>
-    ///     The horizontal position of the rectangle.
+    ///     The horizontal position of the Rectangle.
     /// </summary>
     public float X;
 
     /// <summary>
-    ///     The vertical position of the rectangle.
+    ///     The vertical position of the Rectangle.
     /// </summary>
     public float Y;
 
     /// <summary>
-    ///     The width of the rectangle.
+    ///     The Width of the Rectangle.
     /// </summary>
     public float Width;
 
     /// <summary>
-    ///     The height of the rectangle.
+    ///     The Height of the Rectangle.
     /// </summary>
     public float Height;
 
@@ -187,10 +187,10 @@ public struct Rectangle
     /// <summary>
     ///     Creates a new float rectangle.
     /// </summary>
-    /// <param name="x">The horizontal position of the rectangle.</param>
-    /// <param name="y">The vertical position of the rectangle.</param>
-    /// <param name="width">The width of the rectangle.</param>
-    /// <param name="height">The height of the rectangle.</param>
+    /// <param name="x">The horizontal position of the Rectangle.</param>
+    /// <param name="y">The vertical position of the Rectangle.</param>
+    /// <param name="width">The Width of the Rectangle.</param>
+    /// <param name="height">The Height of the Rectangle.</param>
     public Rectangle(float x, float y, float width, float height)
     {
         X      = x;

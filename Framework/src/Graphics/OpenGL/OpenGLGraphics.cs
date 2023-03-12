@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace Battery.Framework;
 
 /// <summary>
-///     A OpenGl Graphics backend.
+///     The OpenGl Graphics.
 /// </summary>
 public class OpenGLGraphics : GameGraphics
 {
@@ -13,22 +13,24 @@ public class OpenGLGraphics : GameGraphics
     internal IPlatformWithOpenGL.Context? _context;
 
     /// <summary>
-    ///     Creates a new instance of the <see cref="OpenGLGraphics" /> class.
+    ///     Creates a new instance of <see cref="OpenGLGraphics" /> class.
     /// /// </summary>
-    /// <param name="instance">The game to which the graphics belongs to.</param>
+    /// <param name="instance">The <see cref="Game"/> to which the graphics belongs to.</param>
     public OpenGLGraphics(Game instance)
         : base(instance)
     {
     }
 
     /// <inheritdoc />
-    public override Shader CreateShader(string vertex, string fragment)
-        => new OpenGLShader(this, vertex, fragment);
+    public override Shader CreateShader((string, string) source)
+    {
+        return new OpenGLShader(source);
+    }
 
     /// <inheritdoc />
     public override Shader CreateDefaultShader()
     {
-        return new OpenGLShader(this,
+        return CreateShader((
         @"
             #version 330 core
             layout (location = 0) in vec2 in_Position;
@@ -70,20 +72,26 @@ public class OpenGLGraphics : GameGraphics
                     out_Type.z           * out_Color;
             }
         "
-        );
+        ));
     }
 
     /// <inheritdoc />
     public override Mesh<T> CreateMesh<T>()
-        => new OpenGLMesh<T>(this);
+    {
+        return new OpenGLMesh<T>();
+    }
 
     /// <inheritdoc />
     public override Texture CreateTexture(Image image)
-        => new OpenGLTexture(this, image);
+    {
+        return new OpenGLTexture(image);
+    }
 
     /// <inheritdoc />
     public override Surface CreateSurface(int width, int height)
-        => new OpenGLSurface(this, width, height);
+    {
+        return new OpenGLSurface(this, width, height);
+    }
 
     /// <summary>
     ///     Begins the OpenGL Graphics.
@@ -92,9 +100,7 @@ public class OpenGLGraphics : GameGraphics
     {
         if (Game.Platform is IPlatformWithOpenGL platform)
         {
-            _context = platform.CreateContext();
-            _context = platform.SetContext(_context);
-
+            _context = platform.SetContext(platform.CreateContext());
             GL.Import(platform.GetGLProcAdress);
         }
         else
@@ -109,7 +115,7 @@ public class OpenGLGraphics : GameGraphics
     }
 
     /// <summary>
-    ///     Ends the OpenGl graphics.
+    ///     Ends the OpenGl Graphics.
     /// </summary>
     public override void End()
     {
@@ -128,13 +134,13 @@ public class OpenGLGraphics : GameGraphics
             pass.Target.Height
         );
 
-        GL.glBindFramebuffer((pass.Target is OpenGLSurface surface) ? surface.FramebufferID : 0u);
+        GL.glBindFramebuffer((pass.Target is OpenGLSurface surface) ? surface._framebufferID : 0u);
         GL.glViewport(viewport.X, viewport.Y, viewport.Width, viewport.Height);
 
         // Bind the shader and its uniforms.
         if (pass.Material.Shader is OpenGLShader shader)
         {
-            shader.Bind();
+            GL.glUseProgram(shader._id);
 
             // Sets the shader uniforms.
             foreach (var uniform in pass.Material._uniforms)
@@ -243,7 +249,7 @@ public class OpenGLGraphics : GameGraphics
     {
         var previousFramebuffer = GL.glGetIntegerv(GL.GL_FRAMEBUFFER_BINDING, 1);
     
-        GL.glBindFramebuffer(target is OpenGLSurface glSurface ? glSurface.FramebufferID : 0u);
+        GL.glBindFramebuffer(target is OpenGLSurface glSurface ? glSurface._framebufferID : 0u);
         GL.glClearColor(
             color.R / 255,
             color.G / 255,

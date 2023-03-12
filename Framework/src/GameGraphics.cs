@@ -35,7 +35,7 @@ public abstract class GameGraphics
     /// </summary>
     /// <param name="vertex">The vertex source code.</param>
     /// <param name="fragment">The fragment source code.</param>
-    public abstract Shader CreateShader(string vertex, string fragment);
+    public abstract Shader CreateShader((string, string) source);
 
     /// <summary>
     ///     Creates a new <see cref="Shader" /> with the default batcher code.

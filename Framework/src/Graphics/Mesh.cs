@@ -3,19 +3,19 @@ using System.Runtime.CompilerServices;
 namespace Battery.Framework;
 
 /// <summary>
-///     A mesh that store vertices used when rendering to the screen.
+///     A 2D Mesh that store Vertices and Indices used when for rendering.
 /// </summary>
-public abstract class Mesh<T> : Graphic where T : struct, IVertex
+public abstract class Mesh<T> : IDisposable where T : struct, IVertex
 {
     /// <summary>
     ///     Number of vertices in the Mesh.
     /// </summary>
-    public int VertexCount { get; private set; }
+    public int VertexCount { get; private set; } = 0;
 
     /// <summary>
     ///     Number of indices in the Mesh.
     /// </summary>
-    public int IndexCount { get; private set; }
+    public int IndexCount { get; private set; } = 0;
 
     // Array that store vertices.
     internal T[] _vertices;
@@ -27,22 +27,23 @@ public abstract class Mesh<T> : Graphic where T : struct, IVertex
     protected bool _dirty = true;
     
     /// <summary>
-    ///     Creates a new Mesh.
+    ///     Creates a new instance of the <see cref="Mesh"/> class.
     /// </summary>
-    /// <param name="graphics">The Graphics Backend to which this graphic belongs to.</param>
     /// <param name="capacity">The initial capacity of the mesh.</param>
-    public Mesh(GameGraphics graphics, int capacity = 4)
-        : base(graphics)
+    public Mesh(int capacity = 4)
     {
-        // Assign variables.
-        _vertices   = new T[capacity];
-        _indices    = new uint[capacity];
-        VertexCount = 0;
-        IndexCount  = 0;
+        // Initialize the vertex and index arrays.
+        _vertices = new T[capacity];
+        _indices  = new uint[capacity];
     }
 
     /// <summary>
-    ///     Bind this mesh.
+    ///     Dispose this Mesh.
+    /// </summary>
+    public abstract void Dispose();
+
+    /// <summary>
+    ///     Bind this Mesh.
     /// </summary>
     public abstract void Bind();
 

@@ -26,9 +26,9 @@ public class Image
     /// <summary>
     ///     Creates a image with the given color array.
     /// </summary>
-    /// <param name="width">The width of the image.</param>
-    /// <param name="height">The height of the image.</param>
-    /// <param name="data">The array containing the pixels of the image.</param>
+    /// <param name="width">The Width of the Image.</param>
+    /// <param name="height">The Height of the Image.</param>
+    /// <param name="data">The array containing the pixels of the Image.</param>
     public Image(int width, int height, Color[] data)
     {
         if (width <= 0 || height <= 0)
@@ -46,8 +46,8 @@ public class Image
     /// <summary>
     ///     Creates an empty image filled with the given color.
     /// </summary>
-    /// <param name="width">The width of the image.</param>
-    /// <param name="height">The height of the image.</param>
+    /// <param name="width">The Width of the Image.</param>
+    /// <param name="height">The Height of the Image.</param>
     /// <param name="color">The color used to fill the image.</param>
     public Image(int width, int height, Color color)
     {
@@ -65,8 +65,8 @@ public class Image
     ///     Creates a image by using the given byte data.
     ///     Used when creating a Font Char.
     /// </summary>
-    /// <param name="width">The width of the image.</param>
-    /// <param name="height">The height of the image.</param>
+    /// <param name="width">The Width of the image.</param>
+    /// <param name="height">The Height of the image.</param>
     /// <param name="data">The bytes of the char.</param>
     public Image(int width, int height, byte[] data)
     {

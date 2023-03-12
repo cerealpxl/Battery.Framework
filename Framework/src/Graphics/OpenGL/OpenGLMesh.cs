@@ -4,31 +4,24 @@ using OpenGL;
 namespace Battery.Framework;
 
 /// <summary>
-///     A OpenGL mesh.
+///     Represents a single OpenGL Mesh.
 /// </summary>
 public class OpenGLMesh<T> : Mesh<T> where T : struct, IVertex
 {   
-    /// <summary>
-    ///     Vertex Array ID.
-    /// </summary>
+    // Vertex Array ID.
     internal uint _vertexArrayID;
     
-    /// <summary>
-    ///     Vertex Buffer ID.
-    /// </summary>
+    // Vertex Buffer ID.
     internal uint _vertexBufferID;
 
-    /// <summary>
-    ///     Index Buffer ID.
-    /// </summary>
+    // Index Buffer ID.
     internal uint _indexBufferID;
 
     /// <summary>
-    ///     Creates a new OpenGL mesh.
+    ///     Creates a new instance of <see cref="OpenGLMesh"/> class.
     /// </summary>
     /// <param name="capacity">The initial capacity of the mesh.</param>
-    public OpenGLMesh(GameGraphics graphics, int capacity = 4)
-        : base(graphics, capacity)
+    public OpenGLMesh(int capacity = 4)
     {
         // Creates the mesh implementation.
         _vertexArrayID  = GL.glGenVertexArray();
@@ -37,18 +30,16 @@ public class OpenGLMesh<T> : Mesh<T> where T : struct, IVertex
     }
 
     /// <summary>
-    ///     Dispose the OpenGL mesh.
+    ///     Delete the OpenGL Mesh by deleting the Vertex Array and its Buffers.
     /// </summary>
-    protected override void Disposing(bool disposing)
+    public override void Dispose()
     {
         GL.glDeleteBuffer(_vertexBufferID);
         GL.glDeleteBuffer(_indexBufferID);
         GL.glDeleteVertexArray(_vertexArrayID);
     }
 
-    /// <summary>
-    ///     Bind this mesh.
-    /// </summary>
+    /// <inheritdoc/>
     public override void Bind()
     {
         if (_dirty)
@@ -60,7 +51,7 @@ public class OpenGLMesh<T> : Mesh<T> where T : struct, IVertex
     }
 
     /// <summary>
-    ///     Upload the mesh elements.
+    ///     Upload the Mesh elements to the GPU.
     /// </summary>
     internal unsafe void Upload()
     {

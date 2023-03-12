@@ -1,28 +1,21 @@
 namespace Battery.Framework;
 
 /// <summary>
-///     Structure that handle the Shader Programs logic.
+///     Represents a Shader Program, containing a Vertex and Fragment Shader.
+///     Used during rendering.
 /// </summary>
-public abstract class Shader : Graphic
+public abstract class Shader : IDisposable
 {
     /// <summary>
-    ///     Creates a new shader using the given vertex and fragment.
+    ///     Creates a new <see cref="Shader"/> using the given vertex and fragment.
     /// </summary>
-    /// <param name="graphics">The Graphics Backend to which this graphic belongs to.</param>
-    /// <param name="vertexSource">The source code of the vertex shader.</param>
-    /// <param name="fragmentSource">The source code of the fragment shader.</param>
-    public Shader(GameGraphics graphics, string vertexSource, string fragmentSource)
-        : base(graphics)
+    /// <param name="source">A tuple containing the Vertex and Fragment sources, respectively.</param>
+    public Shader((string, string) source)
     {
     }
 
     /// <summary>
-    ///     Use this shader program.
+    ///     Dispose the Shader program.
     /// </summary>
-    public abstract void Bind();
-    
-    /// <summary>
-    ///     Use this shader program.
-    /// </summary>
-    public abstract void Unbind();
+    public abstract void Dispose();
 }

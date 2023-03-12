@@ -4,20 +4,20 @@ using OpenGL;
 namespace Battery.Framework;
 
 /// <summary>
-///     A OpenGL texture.
+///     Represents a single OpenGL Texture.
 /// </summary>
 public class OpenGLTexture : Texture
 {
     /// <summary>
-    ///     The texture pointer.
+    ///     The pointer to the Texture.
     /// </summary>
     internal uint ID { get; private set; }
 
     /// <summary>
-    ///     Creates a OpenGL Texture.
+    ///     Creates a new instance of <see cref="OpenGLTexture"/> class.
     /// </summary>
-    public OpenGLTexture(GameGraphics graphics, Image image)
-        : base(graphics, image)
+    public OpenGLTexture(Image image)
+        : base(image)
     {
         ID    = GL.glGenTexture();
         Image = image;
@@ -48,15 +48,14 @@ public class OpenGLTexture : Texture
     }
 
     /// <summary>
-    ///     Dispose the OpenGL Texture.
+    ///     Delete the OpenGL Texture from the GPU.
     /// </summary>
-    protected override void Disposing(bool disposing)
-        => GL.glDeleteTexture(ID);
+    public override void Dispose()
+    {
+        GL.glDeleteTexture(ID);
+    }
 
-    /// <summary>
-    ///     Sets the texture data from the given buffer.
-    /// </summary>
-    /// <param name="buffer">Buffer to use.</param>
+    /// <inheritdoc/>
     public override unsafe void SetData<T>(ReadOnlyMemory<T> buffer)
     {
         using MemoryHandle handle = buffer.Pin();
@@ -79,10 +78,7 @@ public class OpenGLTexture : Texture
         GL.glBindTexture(GL.GL_TEXTURE_2D, 0u);
     }
 
-    /// <summary>
-    ///     Writes the texture to the given buffer.
-    /// </summary>
-    /// <param name="buffer">Buffer to write.</param>
+    /// <inheritdoc/>
     public override unsafe void GetData<T>(Memory<T> buffer)
     {
         using var handle = buffer.Pin();

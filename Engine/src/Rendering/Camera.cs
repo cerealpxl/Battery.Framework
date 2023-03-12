@@ -140,6 +140,9 @@ public class Camera : Component, ITagged
         }
     }
 
+    /// <summary>
+    ///     The Width and Height of the Camera, in Pixels.
+    /// </summary>
     public Vector2 Dimensions
     {
         get => _dimensions;
@@ -154,7 +157,7 @@ public class Camera : Component, ITagged
     }
 
     /// <summary>
-    ///     The width of the Camera.
+    ///     The Width of the Camera, in Pixels.
     /// </summary>
     public float Width
     {
@@ -170,7 +173,7 @@ public class Camera : Component, ITagged
     }
 
     /// <summary>
-    ///     The height of the Camera.
+    ///     The Height of the Camera, in Pixels.
     /// </summary>
     public float Height
     {

@@ -6,12 +6,12 @@ namespace Battery.Framework;
 public abstract class RenderTarget
 {
     /// <summary>
-    ///     The width of the target.
+    ///     The Width of the Target, in Pixels.
     /// </summary>
     public abstract int Width { get; }
 
     /// <summary>
-    ///     The height of the target.
+    ///     The Height of the target, in Pixels.
     /// </summary>
     public abstract int Height { get; }
 }
