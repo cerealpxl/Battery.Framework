@@ -240,7 +240,7 @@ public class Camera : Component, ITagged
         if (!matrixOnly)
         {
             Surface.Dispose();
-            Surface = _graphics.CreateSurface((int)Width, (int)Height);
+            Surface = _graphics.CreateSurface((int)Width * (int)ScaleX, (int)Height * (int)ScaleY);
         }
     }
 

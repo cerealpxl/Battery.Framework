@@ -116,6 +116,9 @@ public class RenderSystem : ComponentSystem
     {
         if (component is IRenderer renderer)
             Renderers.Add(renderer);
+
+        if (component is Camera camera)
+            Cameras.Add(camera);
     }
 
     /// <inheritdoc/>
@@ -123,5 +126,8 @@ public class RenderSystem : ComponentSystem
     {
         if (component is IRenderer renderer)
             Renderers.Remove(renderer);
+
+        if (component is Camera camera)
+            Cameras.Remove(camera);
     }
 }
