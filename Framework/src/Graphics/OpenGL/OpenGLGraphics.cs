@@ -23,12 +23,12 @@ public class OpenGLGraphics : GameGraphics
 
     /// <inheritdoc />
     public override Shader CreateShader(string vertex, string fragment)
-        => new OpenGLShader(vertex, fragment);
+        => new OpenGLShader(this, vertex, fragment);
 
     /// <inheritdoc />
     public override Shader CreateDefaultShader()
     {
-        return new OpenGLShader(
+        return new OpenGLShader(this,
         @"
             #version 330 core
             layout (location = 0) in vec2 in_Position;
@@ -75,11 +75,11 @@ public class OpenGLGraphics : GameGraphics
 
     /// <inheritdoc />
     public override Mesh<T> CreateMesh<T>()
-        => new OpenGLMesh<T>();
+        => new OpenGLMesh<T>(this);
 
     /// <inheritdoc />
     public override Texture CreateTexture(Image image)
-        => new OpenGLTexture(image);
+        => new OpenGLTexture(this, image);
 
     /// <inheritdoc />
     public override Surface CreateSurface(int width, int height)

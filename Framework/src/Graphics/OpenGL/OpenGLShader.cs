@@ -17,8 +17,8 @@ public class OpenGLShader : Shader
     /// </summary>
     /// <param name="vertexSource">The source code of the vertex shader.</param>
     /// <param name="fragmentSource">The source code of the fragment shader.</param>
-    public OpenGLShader(string vertexSource, string fragmentSource)
-        : base(vertexSource, fragmentSource)
+    public OpenGLShader(GameGraphics graphics, string vertexSource, string fragmentSource)
+        : base(graphics, vertexSource, fragmentSource)
     {
         /// <summary>
         ///     Throw an error.

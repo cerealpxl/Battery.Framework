@@ -10,14 +10,21 @@ public abstract class Graphic : IDisposable
     /// </summary>
     public bool Disposed { get; private set; }
 
+    /// <summary>
+    ///     The Graphics Backend to which this graphic belongs to.
+    /// </summary>
+    public GameGraphics Parent { get; private set; }
+
     // A list storing the resources.
     private static HashSet<Graphic> _resources = new HashSet<Graphic>();
 
     /// <summary>
     ///     Creates a new graphics resource.
     /// </summary>
-    public Graphic()
+    /// <param name="graphics">The Graphics Backend to which this graphic belongs to.</param>
+    public Graphic(GameGraphics graphics)
     {
+        Parent = graphics;
         _resources.Add(this);
     }
     

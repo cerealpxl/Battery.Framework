@@ -47,7 +47,7 @@ public class RenderSystem : ComponentSystem
     }
 
     /// <inheritdoc />
-    public override void RenderBegin(GameTime time)
+    public override void RenderBegin()
     {
         if (Game.Instance is Game)
             Game.Instance.Graphics.Batch?.Clear();
@@ -57,7 +57,7 @@ public class RenderSystem : ComponentSystem
     ///     Renders all the renderable components to the enabled cameras.
     /// </summary>
     /// <param name="time">The <see cref="GameTime" /> struct.</param>
-    public override void Render(GameTime time)
+    public override void Render()
     {
         if (!(Game.Instance is Game))
             return;
@@ -78,19 +78,19 @@ public class RenderSystem : ComponentSystem
             foreach (var renderer in Renderers)
             {
                 if (renderer.Visible)
-                    renderer.RenderBegin(time);
+                    renderer.RenderBegin();
             }
 
             foreach (var renderer in Renderers)
             {
                 if (renderer.Visible)
-                    renderer.Render(time);
+                    renderer.Render();
             }
 
             foreach (var renderer in Renderers)
             {
                 if (renderer.Visible)
-                    renderer.RenderEnd(time);
+                    renderer.RenderEnd();
             }
 
             graphics.Batch?.PopTarget();
@@ -106,7 +106,7 @@ public class RenderSystem : ComponentSystem
     }
 
     /// <inheritdoc />
-    public override void RenderEnd(GameTime time)
+    public override void RenderEnd()
     {
         if (Game.Instance is Game)
             Game.Instance.Graphics.Batch?.Present();

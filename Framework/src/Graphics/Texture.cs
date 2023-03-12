@@ -35,9 +35,13 @@ public abstract class Texture : Graphic
     /// <summary>
     ///     Creates a new texture with the given image.
     /// </summary>
+    /// <param name="graphics">The Graphics Backend to which this graphic belongs to.</param>
     /// <param name="image">The image that represents the image.</param>
-    public Texture(Image image)
-        => Image = image;
+    public Texture(GameGraphics graphics, Image image)
+        : base(graphics)
+    {
+        Image = image;
+    }
 
     /// <summary>
     ///     Sets the texture data from the given buffer.

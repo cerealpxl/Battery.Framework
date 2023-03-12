@@ -29,8 +29,10 @@ public abstract class Mesh<T> : Graphic where T : struct, IVertex
     /// <summary>
     ///     Creates a new Mesh.
     /// </summary>
+    /// <param name="graphics">The Graphics Backend to which this graphic belongs to.</param>
     /// <param name="capacity">The initial capacity of the mesh.</param>
-    public Mesh(int capacity = 4)
+    public Mesh(GameGraphics graphics, int capacity = 4)
+        : base(graphics)
     {
         // Assign variables.
         _vertices   = new T[capacity];

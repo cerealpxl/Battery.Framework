@@ -88,7 +88,7 @@ public class SceneManager : GameManager
     /// <summary>
     ///     Updates the current Scene.
     /// </summary>
-    public override void Update(GameTime time)
+    public override void Update()
     {
         // Swap the current scene.
         if (_next != null)
@@ -104,7 +104,7 @@ public class SceneManager : GameManager
         {
             try
             {
-                Current.Update(time);
+                Current.Update();
             }
             catch (Exception e)
             {
@@ -112,19 +112,19 @@ public class SceneManager : GameManager
             }
         }
         else
-            Current.Update(time);
+            Current.Update();
 
         OnUpdateEnd?.Invoke();
     }
 
     /// <inheritdoc/>
-    public override void RenderBegin(GameTime time)
+    public override void RenderBegin()
     {
         if (OnCrash != null)
         {
             try
             {
-                Current.RenderBegin(time);
+                Current.RenderBegin();
             }
             catch (Exception e)
             {
@@ -132,19 +132,19 @@ public class SceneManager : GameManager
             }
         }
         else
-            Current.RenderBegin(time);
+            Current.RenderBegin();
     }
 
     /// <summary>
     ///     Renders the current Scene.
     /// </summary>
-    public override void Render(GameTime time)
+    public override void Render()
     {
         if (OnCrash != null)
         {
             try
             {
-                Current.Render(time);
+                Current.Render();
             }
             catch (Exception e)
             {
@@ -152,17 +152,17 @@ public class SceneManager : GameManager
             }
         }
         else
-            Current.Render(time);
+            Current.Render();
     }
 
     /// <inheritdoc/>
-    public override void RenderEnd(GameTime time)
+    public override void RenderEnd()
     {
         if (OnCrash != null)
         {
             try
             {
-                Current.RenderEnd(time);
+                Current.RenderEnd();
             }
             catch (Exception e)
             {
@@ -170,7 +170,7 @@ public class SceneManager : GameManager
             }
         }
         else
-            Current.RenderEnd(time);
+            Current.RenderEnd();
     }
 
     /// <summary>

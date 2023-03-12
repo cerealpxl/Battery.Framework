@@ -27,8 +27,8 @@ public class OpenGLMesh<T> : Mesh<T> where T : struct, IVertex
     ///     Creates a new OpenGL mesh.
     /// </summary>
     /// <param name="capacity">The initial capacity of the mesh.</param>
-    public OpenGLMesh(int capacity = 4)
-        : base(capacity)
+    public OpenGLMesh(GameGraphics graphics, int capacity = 4)
+        : base(graphics, capacity)
     {
         // Creates the mesh implementation.
         _vertexArrayID  = GL.glGenVertexArray();

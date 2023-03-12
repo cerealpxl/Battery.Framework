@@ -41,17 +41,17 @@ public class Renderer : Component, IRenderer
     }
 
     /// <inheritdoc/>
-    public virtual void RenderBegin(GameTime time)
+    public virtual void RenderBegin()
     {
     }
 
     /// <inheritdoc/>
-    public virtual void Render(GameTime time)
+    public virtual void Render()
     {
     }
 
     /// <inheritdoc/>
-    public virtual void RenderEnd(GameTime time)
+    public virtual void RenderEnd()
     {
     }
 }

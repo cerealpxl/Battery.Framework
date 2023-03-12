@@ -60,12 +60,12 @@ public class Scene
     ///     Execute all the Update callbacks of the Component Systems.
     /// </summary>
     /// <param name="time">The <see cref="GameTime" /> structure.</param>
-    public virtual void Update(GameTime time)
+    public virtual void Update()
     {
         foreach (var system in Systems)
         {
             if (system.Active)
-                system.Update(time);
+                system.Update();
         }
     }
 
@@ -73,12 +73,12 @@ public class Scene
     ///     Execute all the Render Begin callbacks, before the Render method.
     /// </summary>
     /// <param name="time">The <see cref="GameTime" /> structure.</param>
-    public virtual void RenderBegin(GameTime time)
+    public virtual void RenderBegin()
     {
         foreach (var system in Systems)
         {
             if (system.Visible)
-                system.RenderBegin(time);
+                system.RenderBegin();
         }
     }
 
@@ -86,12 +86,12 @@ public class Scene
     ///     Execute all the Render callbacks of the Component Systems.
     /// </summary>
     /// <param name="time">The <see cref="GameTime" /> structure.</param>
-    public virtual void Render(GameTime time)
+    public virtual void Render()
     {
         foreach (var system in Systems)
         {
             if (system.Visible)
-                system.Render(time);
+                system.Render();
         }
     }
 
@@ -99,12 +99,12 @@ public class Scene
     ///     Execute all the Render End callbacks, after the Render method.
     /// </summary>
     /// <param name="time">The <see cref="GameTime" /> structure.</param>
-    public virtual void RenderEnd(GameTime time)
+    public virtual void RenderEnd()
     {
         foreach (var system in Systems)
         {
             if (system.Visible)
-                system.RenderEnd(time);
+                system.RenderEnd();
         }
     }
 

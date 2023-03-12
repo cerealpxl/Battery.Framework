@@ -18,8 +18,8 @@ public class Program
     {
         Batch? batch = null;
 
-        Project.OnBegin  += (             ) => batch = new Batch(Project);
-        Project.OnRender += (GameTime time) =>
+        Project.OnBegin  += () => batch = new Batch(Project);
+        Project.OnRender += () =>
         {
             Project.Graphics.Clear(Project.Platform, Color.Black);
             batch?.Clear();

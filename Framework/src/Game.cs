@@ -50,12 +50,12 @@ public class Game
     /// <summary>
     ///     Action called to update the game.
     /// </summary>
-    public event Action<GameTime>? OnUpdate;
+    public event Action? OnUpdate;
 
     /// <summary>
     ///     Action called to render the game.
     /// </summary>
-    public event Action<GameTime>? OnRender;
+    public event Action? OnRender;
 
     /// <summary>
     ///     Action called after the game ends.
@@ -88,49 +88,43 @@ public class Game
         Exiting = false;
 
         // Assign time variables.
-        var time        = new GameTime();
         var accumulator = 0.0;
 
         // We don't want the time of the Begin method.
-        time.Update();
+        Time.Update();
 
         while (Running)
         {
             Platform.Update();
-            time.Update();
-
-            // Snaps the delta time to a nice framerate.
-            if (Math.Abs(time.RawDelta - 1f / 120f) < 0.0002f) time.RawDelta = 1f / 120f;
-            if (Math.Abs(time.RawDelta - 1f / 60f)  < 0.0002f) time.RawDelta = 1f / 60f;
-            if (Math.Abs(time.RawDelta - 1f / 30f)  < 0.0002f) time.RawDelta = 1f / 30f;
-            if (Math.Abs(time.RawDelta - 1f / 15f)  < 0.0002f) time.RawDelta = 1f / 15f;
+            Time.Update();
 
             // Increase the accumulator.
-            accumulator += time.RawDelta;
+            accumulator += Time.RawDelta;
 
             // Prevents unexpected crashes.
-            if (accumulator >= time.FixedDelta * 8f) 
+            if (accumulator >= Time.FixedDelta * 8f) 
             {
                 accumulator   = 0f;
-                time.RawDelta = time.FixedDelta;
+                Time.RawDelta = Time.FixedDelta;
             }
 
             // Perform an update when the frame accumulator reaches the fixed delta tine.
-            var delta = time.RawDelta;
-            while (accumulator >= time.FixedDelta && !Exiting)
+            var delta = Time.RawDelta;
+            
+            while (accumulator >= Time.FixedDelta && !Exiting)
             {
-                accumulator  -= time.FixedDelta;
-                time.RawDelta = time.FixedDelta;
+                accumulator  -= Time.FixedDelta;
+                Time.RawDelta = Time.FixedDelta;
                 
                 if (Platform.Focused || RunWhileUnfocused)
-                    Update(time);
+                    Update();
 
                 Keyboard.Update();
                 Mouse.Update();
             }
 
             // Updates the time variables for the variable timestep.
-            time.RawDelta = (float)delta;
+            Time.RawDelta = (float)delta;
 
             if (Exiting)
                 Running = false;
@@ -138,7 +132,7 @@ public class Game
             // Renders the game.
             if (Running)
             {
-                Render(time);
+                Render();
                 Platform.Present();
             }
 
@@ -185,43 +179,42 @@ public class Game
     /// <summary>
     ///     Performs the Update events of the game and managers.
     /// </summary>
-    /// <param name="time">The <see cref="GameTime" /> structure.</param>
-    public virtual void Update(GameTime time)
+    public virtual void Update()
     {
         foreach (var manager in Managers)
         {
             if (manager.Active)
-                manager.Update(time);
+                manager.Update();
         }
 
-        OnUpdate?.Invoke(time);
+        OnUpdate?.Invoke();
     }
     
     /// <summary>
     ///     Performs the Render events of the game and managers.
     /// </summary>
     /// <param name="time">The <see cref="GameTime" /> structure.</param>
-    public virtual void Render(GameTime time)
+    public virtual void Render()
     {
         foreach (var manager in Managers)
         {
             if (manager.Visible)
-                manager.RenderBegin(time);
+                manager.RenderBegin();
         }
 
         foreach (var manager in Managers)
         {
             if (manager.Visible)
-                manager.Render(time);
+                manager.Render();
         }
 
         foreach (var manager in Managers)
         {
             if (manager.Visible)
-                manager.RenderEnd(time);
+                manager.RenderEnd();
         }
 
-        OnRender?.Invoke(time);
+        OnRender?.Invoke();
     }
 
     /// <summary>

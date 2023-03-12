@@ -16,8 +16,8 @@ public class OpenGLTexture : Texture
     /// <summary>
     ///     Creates a OpenGL Texture.
     /// </summary>
-    public OpenGLTexture(Image image)
-        : base(image)
+    public OpenGLTexture(GameGraphics graphics, Image image)
+        : base(graphics, image)
     {
         ID    = GL.glGenTexture();
         Image = image;
