@@ -69,7 +69,6 @@ public abstract class ComponentSystem : ITagged
     /// <summary>
     ///     Called in every fixed timestep of the <see cref="Battery.Engine.Scene"/>.
     /// </summary>
-    /// <param name="time">The <see cref="GameTime" /> struct.</param>
     public virtual void Update()
     {
     }
@@ -78,7 +77,6 @@ public abstract class ComponentSystem : ITagged
     /// <summary>
     ///     Called before the Render method.
     /// </summary>
-    /// <param name="time">The <see cref="GameTime" /> struct.</param>
     public virtual void RenderBegin()
     {
     }
@@ -86,7 +84,6 @@ public abstract class ComponentSystem : ITagged
     /// <summary>
     ///     Called to render the system to the screen.
     /// </summary>
-    /// <param name="time">The <see cref="GameTime" /> struct.</param>
     public virtual void Render()
     {
     }
@@ -94,7 +91,6 @@ public abstract class ComponentSystem : ITagged
     /// <summary>
     ///     Called after the Render method.
     /// </summary>
-    /// <param name="time">The <see cref="GameTime" /> struct.</param>
     public virtual void RenderEnd()
     {
     }
