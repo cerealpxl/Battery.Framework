@@ -137,6 +137,20 @@ public class OpenGLGraphics : GameGraphics
         GL.glBindFramebuffer((pass.Target is OpenGLSurface surface) ? surface._framebufferID : 0u);
         GL.glViewport(viewport.X, viewport.Y, viewport.Width, viewport.Height);
 
+        // Scissor.
+        if (pass.Scissor is RectangleI scissor)
+        {
+            GL.glEnable(GL.GL_SCISSOR_TEST);
+            GL.glScissor(
+                scissor.X,
+                scissor.Y,
+                scissor.Width,
+                scissor.Height
+            );
+        }
+        else
+            GL.glDisable(GL.GL_SCISSOR_TEST);
+
         // Bind the shader and its uniforms.
         if (pass.Material.Shader is OpenGLShader shader)
         {
@@ -202,6 +216,8 @@ public class OpenGLGraphics : GameGraphics
             }
         }
 
+        GL.glEnable(GL.GL_BLEND);
+
         // Draw the elements of the mesh.
         if (pass.Mesh is OpenGLMesh<T> mesh && mesh.VertexCount > 0) unsafe 
         {
@@ -232,7 +248,7 @@ public class OpenGLGraphics : GameGraphics
             }
 
             // Finally. draw the elements.
-            GL.glDrawElements(GL.GL_TRIANGLES, pass.IndexCount, GL.GL_UNSIGNED_INT, new IntPtr(sizeof(uint) * pass.IndexStart).ToPointer());   
+            GL.glDrawElements(GL.GL_TRIANGLES, pass.IndexCount, GL.GL_UNSIGNED_INT, new IntPtr(sizeof(uint) * pass.IndexStart).ToPointer());
 
             // Unbind the mesh.
             GL.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, 0u);

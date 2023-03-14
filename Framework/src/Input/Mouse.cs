@@ -9,7 +9,15 @@ public static class Mouse
     /// </summary>
     public static Vector2 Position { get; private set; } = Vector2.Zero;
 
+    /// <summary>
+    ///     Represents the offset of the mouse wheel.
+    /// </summary>
     public static Vector2 Wheel { get; private set; } = Vector2.Zero;
+
+    public static Action<MouseButton>? OnButtonDown; 
+    public static Action<MouseButton>? OnButtonUp; 
+    public static Action<Vector2>? OnMouseMoved; 
+    public static Action<Vector2>? OnWheelMoved; 
 
     // A list storing pressing mouse buttons.
     private static HashSet<MouseButton> _down = new HashSet<MouseButton>();
@@ -101,6 +109,8 @@ public static class Mouse
     /// <param name="button">The button to register.</param>
     public static void DoMouseDown(MouseButton button)
     {
+        OnButtonDown?.Invoke(button);
+
         if (_down.Contains(button))
             return;
         
@@ -115,6 +125,8 @@ public static class Mouse
     /// <param name="button">The button to register.</param>
     public static void DoMouseUp(MouseButton button)
     {
+        OnButtonUp?.Invoke(button);
+
         if (!_down.Contains(button))
             return;
 
@@ -129,7 +141,9 @@ public static class Mouse
     /// <param name="x">The horizontal position of the cursor relative to the window.</param>
     /// <param name="y">The vertical position of the cursor relative to the window.</param>
     public static void DoMouseMotion(int x, int y) 
-        => Position = new Vector2(x, y);
+    {
+        OnMouseMoved?.Invoke(Position = new Vector2(x, y));
+    }
 
     /// <summary>
     ///     Updates the position of the mouse wheel.
@@ -137,5 +151,7 @@ public static class Mouse
     /// <param name="x">The horizontal offset of the wheel.</param>
     /// <param name="y">The vertical offset of the wheel.</param>
     public static void DoMouseWheel(float x, float y)
-        => Wheel = new Vector2(x, y);
+    {
+        OnWheelMoved?.Invoke(Wheel = new Vector2(x, y));
+    }
 }

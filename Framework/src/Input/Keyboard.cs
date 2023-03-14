@@ -17,6 +17,16 @@ public static class Keyboard
     /// </summary>
     public static bool Shift => Down(KeyConstant.LeftShift, KeyConstant.RightShift);
 
+    /// <summary>
+    ///     Called when a keyboard key is immediately down.
+    /// </summary>
+    public static Action<KeyConstant>? OnKeyDown;
+
+    /// <summary>
+    ///     Called when a keyboard key is immediately released.
+    /// </summary>
+    public static Action<KeyConstant>? OnKeyUp;
+
     // The list that store the pressing keys.
     private static HashSet<KeyConstant> _down = new HashSet<KeyConstant>();
     
@@ -86,9 +96,11 @@ public static class Keyboard
     /// <param name="key">The key to register.</param>
     public static void DoKeyDown(KeyConstant key)
     {
+        OnKeyDown?.Invoke(key);
+
         if (_down.Contains(key))
             return;
-        
+
         // Update hash sets.
         _down.Add(key);
         _pressed.Add(key);
@@ -100,6 +112,8 @@ public static class Keyboard
     /// <param name="key">The key to register.</param>
     public static void DoKeyUp(KeyConstant key)
     {
+        OnKeyUp?.Invoke(key);
+
         if (!_down.Contains(key))
             return;
 

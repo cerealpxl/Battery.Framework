@@ -10,7 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Framework\Battery.Framework.csproj" />
     <ProjectReference Include="..\..\Engine\Battery.Engine.csproj" />
-    <ProjectReference Include="..\..\Platforms\SDL2/Battery.Framework.SDL2.csproj" />
+    <ProjectReference Include="..\..\Platforms\SDL2\Battery.Framework.SDL2.csproj" />
   </ItemGroup>
 
 </Project>

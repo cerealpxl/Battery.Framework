@@ -12,5 +12,10 @@
     <PackageReference Include="StbImageWriteSharp" Version="1.16.7" />
     <PackageReference Include="StbTrueTypeSharp" Version="1.26.11" />
   </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Battery.Engine" />
+    <InternalsVisibleTo Include="Battery.Tools" />
+  </ItemGroup>
   
 </Project>

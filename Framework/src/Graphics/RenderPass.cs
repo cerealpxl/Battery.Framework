@@ -16,6 +16,11 @@ public struct RenderPass<T> where T : struct, IVertex
     public RectangleI? Viewport;
 
     /// <summary>
+    ///     The Scissor rectangle.
+    /// </summary>
+    public RectangleI? Scissor = null;
+
+    /// <summary>
     ///     The Mesh to use.
     /// </summary>
     public Mesh<T> Mesh;
@@ -34,6 +39,8 @@ public struct RenderPass<T> where T : struct, IVertex
     ///     The number of Indices to render.
     /// </summary>
     public int IndexCount;
+
+    public int pruigi = 0;
 
     /// <summary>
     ///     Creates a new instance of the <see cref="RenderPass"/> class.

@@ -100,6 +100,17 @@ public struct Color
         A = (byte)(alpha * 225);
     }
 
+    /// <summary>
+    /// Creates a color given the uint32 RGBA data
+    /// </summary>
+    public Color(byte rgba)
+    {
+        R = (byte)(rgba >> 24);
+        G = (byte)(rgba >> 16);
+        B = (byte)(rgba >> 08);
+        A = (byte)(rgba);
+    }
+
     
     /// <summary>
     ///     Premultiplies the color value based on its Alpha component

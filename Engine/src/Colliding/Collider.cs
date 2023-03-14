@@ -77,7 +77,7 @@ public abstract class Collider : Component, ITagged
     {
         foreach (var collider in Colliders)
         {
-            if (collider.Tag.ContainsAny(tags) && collider != this && collider.Colliding(this))
+            if (collider.Tag.ContainsAny(tags) && collider.Collideable && collider != this && collider.Colliding(this))
                 return true;
         }
         return false;

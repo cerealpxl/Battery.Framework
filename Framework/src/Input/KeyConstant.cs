@@ -56,6 +56,7 @@ public enum KeyConstant
     Right,
     Up,
     Down,
+    Escape,
     Home,
     End,
     PageUp,

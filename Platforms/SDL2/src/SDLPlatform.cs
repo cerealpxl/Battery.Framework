@@ -429,6 +429,7 @@ public class SDLPlatform : GamePlatform, IPlatformWithOpenGL
             case SDL.SDL_Keycode.SDLK_UP:    return KeyConstant.Up;
             case SDL.SDL_Keycode.SDLK_DOWN:  return KeyConstant.Down;
             
+            case SDL.SDL_Keycode.SDLK_ESCAPE:   return KeyConstant.Escape;
             case SDL.SDL_Keycode.SDLK_HOME:     return KeyConstant.Home;
             case SDL.SDL_Keycode.SDLK_END:      return KeyConstant.End;
             case SDL.SDL_Keycode.SDLK_PAGEUP:   return KeyConstant.PageUp;
