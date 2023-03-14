@@ -141,13 +141,16 @@ public class GuiManager : GameManager
         _game.Graphics.Clear(_game.Platform, Color.Black);
 
         // Creates the Shader and its Material.
-        if ((_shader == null || _material == null) && _game.Graphics is OpenGLGraphics)
+        if (_shader == null || _material == null)
         {
-            _shader = _game.Graphics.CreateShader((GLVertexShader, GLFragmentShader));
-            _material = new ShaderMaterial(_shader);
+            if (_game.Graphics is OpenGLGraphics)
+            {
+                _shader = _game.Graphics.CreateShader((GLVertexShader, GLFragmentShader));
+                _material = new ShaderMaterial(_shader);
+            }
+            else
+                throw new NotImplementedException(_game.Graphics.GetType().Name);
         }
-        else
-            throw new NotImplementedException(_game.Graphics.GetType().Name);
 
         // Starts the rendering state.
         var drawData = ImGui.GetDrawData();
